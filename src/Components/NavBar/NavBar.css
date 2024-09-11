@@ -1,0 +1,38 @@
+.navbar{
+  background-color: cornsilk;
+  display: flex;
+  align-items: center;
+}
+.navbar ul {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  gap: 15px;
+  list-style: none;
+}
+.navbar .Nav-item {
+  height: 45px;
+}
+
+.navbar .Nav-item a {
+  text-decoration: none;
+  color: black;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.navbar .Nav-item a.active {
+  background-color: rgb(249, 177, 132);
+  border-radius: 15px;
+}
+
+@media only screen and (max-width: 600px) {
+  .navbar ul{
+    flex-direction: column;
+  }
+}

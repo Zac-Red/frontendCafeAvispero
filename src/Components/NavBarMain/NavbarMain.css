@@ -1,0 +1,25 @@
+.navbarmain{
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  background-color: #8b6e5673;
+  padding: 10px;
+  border-radius: 5px;
+  gap: 5px;
+}
+
+.navbarmain .logo {
+  display: flex;
+  text-decoration: none;
+  align-items: center;
+} 
+
+.navbarmain .logo img {
+  height: 50px;
+  width: 50px;
+}
+
+.navbarmain button {
+  height: 30px;
+  width: 30px;
+}

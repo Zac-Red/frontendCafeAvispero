@@ -1,0 +1,100 @@
+.table-container{
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 90%;
+  height: 500px;
+}
+
+.table-content{
+  max-height: 90%;
+  width: 100%;
+  overflow-y: scroll;
+  overflow-x: scroll; 
+}
+
+.table-container table{
+  width: 100%;
+  border:  1px solid #ccc;
+  border-collapse: collapse;
+  margin: 0;
+  padding: 0;
+}
+
+.table-container table caption{
+  font-size: 28px;
+  text-transform: uppercase;
+  font-weight: bold;
+  margin: 8px 0px;
+}
+
+.table-container table tr { 
+  background-color: #fff;
+  border: 1px solid #333;
+}
+
+.table-container table th, 
+.table-container table td { 
+  font-size: 16px;
+  padding: 8px;
+  text-align: center;
+}
+
+.table-container table th{
+  text-transform: uppercase;
+  background-color: #ccc;
+}
+
+.table-container table tr:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  color: #fff;
+}
+
+.table-container table td:hover{
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.pagination{
+  display: flex;
+  gap: 5px;
+}
+
+.pagination span{
+  color: #fff;
+}
+
+.select-items-per-page{
+  background-color: #F8A32C;
+  height: 30px;
+  border-radius: 15px;
+  font-size: medium;
+}
+
+.paginationBTN{
+  height: 30px;
+  background-color: #D8683F;
+  color: #ffff;
+  font-size: 14px;
+  border-radius: 15px;
+}
+
+@media screen and ( max-width: 600px ) {
+  .table-container{
+    border: 0px;
+  }
+  .table-container thead{
+    display: none;
+  }
+  .table-container tr{
+    margin-bottom: 8px;
+    border-bottom: 4px solid #ddd;
+    display: block;
+  }
+  .table-container th, .table-container td {
+    font-size: 12px;
+  }
+  .table-container td {
+    display: block;
+    border-bottom: 1px solid #ddd;
+  }
+}

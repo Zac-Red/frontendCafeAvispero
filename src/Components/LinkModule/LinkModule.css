@@ -1,0 +1,31 @@
+.module {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 6px 10px 1px rgba(0, 0, 0, 65%);
+  width: 300px;
+  height: 100px;
+  border: solid 1px black;
+}
+
+.module-header {
+  background-color: #69503C;
+  color: rgb(253, 178, 4);
+  padding: 10px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  font-weight: bold;
+}
+
+.linkModule {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  text-decoration: none;
+  color: black;
+}
+
+
+/* .linkModule:hover {
+  
+} */

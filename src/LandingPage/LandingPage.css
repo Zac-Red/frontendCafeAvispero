@@ -1,0 +1,89 @@
+.sectContain{
+  display: flex;
+  height: 100vh;
+  padding-top: 50px;
+  align-items: center;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.SectionContentImg {
+  width: 45%; 
+  display: flex;
+  align-items: center;
+  padding: 30px;
+}
+
+.ContainerSectionArt{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 45%;
+  padding: 30px;
+}
+
+.SectionContentArt {
+  width: 100%;
+  background-color: aliceblue;
+  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.5);
+  border-radius: 15px;
+  text-align: center;
+}
+
+.navBarLanding {
+  height: 0px !important;
+}
+
+.landingMenu{
+  display: flex;
+  list-style: none;
+  justify-content: space-around;
+  background-color: #2B231E;
+  height: 50px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.landingMenu li {
+  display: flex;
+  align-items: center;
+  height: 50px;
+}
+
+.landingMenu .Nav-item{
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
+  height: 30px;
+  width: auto;
+  padding-left: 5px;
+  padding-right: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.landingMenu .Nav-item.active{
+  border-radius: 10px;
+  background-color: #a7680a;
+  color: white;
+}
+
+@keyframes show {
+  from {
+    opacity: 0;
+    scale: 25%;
+  }
+  
+  to {
+    opacity: 1;
+    scale: 100%;
+  }
+}
+
+.SectionContentImg img {
+  width: 100%;
+  box-shadow: 10px 10px 20px rgba(0,0,0,0.5),
+              -10px -10px 20px #fff;
+  border-radius: 20px;
+}

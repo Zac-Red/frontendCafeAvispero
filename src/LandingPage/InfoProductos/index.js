@@ -1,0 +1,1 @@
+export { InforProduct } from "./InforProduct";

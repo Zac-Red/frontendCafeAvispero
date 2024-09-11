@@ -1,0 +1,17 @@
+.ProductInfo{
+  padding: 15px;
+}
+
+.ProductInfo ul {
+  display: flex;
+  list-style: none;
+  flex-direction: column;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+.ProductInfo ul li { 
+  text-align: justify;
+  padding: 11px;
+}
