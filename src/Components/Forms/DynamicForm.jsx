@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import './Forms.css';
 
-export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields, titleButton, ButtonStyles }) => {
+export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields, titleButton, ButtonStyles, FormStyles }) => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: Yup.object(validationSchema),
@@ -14,7 +14,7 @@ export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields,
   });
 
   return (
-    <div className="containerforms">
+    <div style={FormStyles}>
       <form onSubmit={formik.handleSubmit}>
         {fields.map(({ name, label, type, placeholder, inputProps, isSelect, options }) => (
           <TextField

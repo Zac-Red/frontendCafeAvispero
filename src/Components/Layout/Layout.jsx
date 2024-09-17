@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom"
 import { NavBarMain } from "../NavBarMain/NavBarMain";
 import { SidebarPrincipal } from "../SideBarPrincipal/SideBarPrincipal";
-import { MainURLs } from "../../router";
 
-export const Layout = () => {
+export const Layout = ({MainURLs}) => {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const handleResize = () => {

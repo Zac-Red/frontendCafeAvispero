@@ -1,10 +1,10 @@
 import { Navigate } from "react-router-dom"
 import { Layout } from "../Components/Layout/Layout";
 
-const AuthGuard = ({userAuth}) => {  
+const AuthGuard = ({userAuth, MainURLs}) => {  
   return (userAuth  
   ? <>
-      <Layout/>
+      <Layout MainURLs={MainURLs}/>
     </>
   :  <Navigate replace to={"/"}/>
   )

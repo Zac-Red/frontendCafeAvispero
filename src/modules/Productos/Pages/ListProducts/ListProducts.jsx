@@ -2,17 +2,21 @@ import ReactDom from 'react-dom';
 import { useState } from "react";
 import useAuthStore from "../../../../store/AuthStore";
 import { fetchPagedData } from "../../../../Api/HttpServer";
-import { getUnitMeasure } from "../../service/actions";
-import { initialValuesCreatedProduct, validationSchemaFormProduct, valuesUpdateProduct } from "../../Helpers/ProductForm.helper";
-import { DeleteElement, DynamicForm, FeedSnackBar, ModalComponent, SearchElement, TableDataCustom } from "../../../../Components";
+import { initialValuesCreatedProduct, validationSchemaFormProduct, validationSchemaFormProductUpdate, valuesUpdateProduct } from "../../Helpers/ProductForm.helper";
+import { DeleteElement, FeedSnackBar, ModalComponent, SearchElement, TableDataCustom } from "../../../../Components";
 import { RequestHTTP } from '../../../../httpServer';
 import { ProductColumns } from '../../Helpers/ProductTable.helper';
 import { useQuery } from '@tanstack/react-query';
 import { ProductSearchOptions } from '../../Helpers/ProductSearch';
-
+import { DynamicFormImg } from '../../../../Components/Forms/DynamicFormImg';
+import axios from 'axios';
+import { StylesFormproduct } from '../../utils/Styles';
+import { getUnitMeasure } from '../../../Common';
 
 export const ListProducts = () => {
   const { token } = useAuthStore();
+
+  const [preview, setPreview] = useState(null);
 
   const [selectedOption, setSelectedOption] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -61,35 +65,91 @@ export const ListProducts = () => {
   const [typeSnack, setTypeSnack] = useState("success");
   
   const handleSubmit = async(formData) => {
-    const response = await RequestHTTP("/products","POST",  formData, token);
-    if (response.sucess) {
-      handleClose();
-      setMessage("Registro ingresado con éxito");
-      setTypeSnack("success");
-      handleOpenSnack();
-      if (inputValue) {
-        productSearch.refetch();
+    const { image, ...restData } = formData;
+    const nwformData = new FormData();
+    try {
+      nwformData.append('file', image);
+      nwformData.append('upload_preset', import.meta.env.VITE_FILECLOUDINARY);
+      const res = await axios.post(`${import.meta.env.VITE_URLCLOUDINARY}`, nwformData);
+      //TODO: asset_id
+      const newproduct = { ...restData, url: res.data.secure_url, }
+      if (res.data.secure_url) {
+        const response = await RequestHTTP("/products","POST",  newproduct, token);
+        if (response.sucess) {
+          handleClose();
+          setMessage("Registro ingresado con éxito");
+          setTypeSnack("success");
+          handleOpenSnack();
+          if (inputValue) {
+            productSearch.refetch();
+          }
+          product.refetch();
+        }else{
+          setMessage(`${response.mesague.message}`);
+          setTypeSnack("error");
+          handleOpenSnack();
+        }
+      }else{
+        setMessage(`${response.mesague.message}`);
+        setTypeSnack("error");
+        handleOpenSnack();
       }
-      product.refetch();
-    }else{
-      setMessage(`${response.mesague.message}`);
+    } catch (error) {
+      setMessage(`${error}`);
       setTypeSnack("error");
       handleOpenSnack();
     }
   };
   
   const handleSubmitUpdate = async (formData) => {
-    const response = await RequestHTTP(`/products/${idProduct}`, "PATCH", formData, token);
-    if (response.sucess) {
-      handleCloseUpdate();
-      setMessage("Registro actualizado con éxito");
-      setTypeSnack("success");
-      handleOpenSnack();
-      if (inputValue) {
-        productSearch.refetch();
+    const { image, ...restData } = formData;
+    if (typeof image === 'string') {
+      const response = await RequestHTTP(`/products/${idProduct}`, "PATCH", formData, token);
+      if (response.sucess) {
+        handleCloseUpdate();
+        setMessage("Registro actualizado con éxito");
+        setTypeSnack("success");
+        handleOpenSnack();
+        if (inputValue) {
+          productSearch.refetch();
+        }
+        product.refetch();
+      }else{
+        setMessage(`${response.mesague.message}`);
+        setTypeSnack("error");
+        handleOpenSnack();
       }
-      product.refetch();
-    }else{
+    }
+    try {
+      if (image instanceof File) {
+        const nwformData = new FormData();
+        nwformData.append('file', image);
+        nwformData.append('upload_preset', import.meta.env.VITE_FILECLOUDINARY);
+        const res = await axios.post(`${import.meta.env.VITE_URLCLOUDINARY}`, nwformData);
+        const newproduct = { ...restData, url: res.data.secure_url, }
+        if (res.data.secure_url) {
+          const response = await RequestHTTP(`/products/${idProduct}`, "PATCH", newproduct, token);
+          if (response.sucess) {
+            handleCloseUpdate();
+            setMessage("Registro actualizado con éxito");
+            setTypeSnack("success");
+            handleOpenSnack();
+            if (inputValue) {
+              productSearch.refetch();
+            }
+            product.refetch();
+          }else{
+            setMessage(`${response.mesague.message}`);
+            setTypeSnack("error");
+            handleOpenSnack();
+          }
+        } else {
+          setMessage(`${response.mesague.message}`);
+          setTypeSnack("error");
+          handleOpenSnack();
+        }
+      }
+    } catch (error) {
       setMessage(`${response.mesague.message}`);
       setTypeSnack("error");
       handleOpenSnack();
@@ -118,6 +178,7 @@ export const ListProducts = () => {
   const handleUpdate = (item) => {
     setUpdateData(valuesUpdateProduct(item));
     setidProduct(item.id);
+    setPreview(item.url)
     handleOpenUpdate();
   }
 
@@ -153,7 +214,7 @@ export const ListProducts = () => {
       type: 'number',
       isSelect: true,  
       options: unitmeasure.data
-    }
+    },
   ];
   
   return (
@@ -191,19 +252,23 @@ export const ListProducts = () => {
           updateFuntion={handleUpdate} 
           deleteFuntion={handledelete}/>}
         { ReactDom.createPortal(<>
-        <ModalComponent elemento={<DynamicForm 
+        <ModalComponent elemento={<DynamicFormImg 
+                      setPreview={setPreview}
+                      preview={preview} 
                       fields={ProductsFormfields} 
                       initialValues={initialValuesCreatedProduct} 
                       validationSchema={validationSchemaFormProduct}
                       onSubmit={handleSubmit}
-                      titleButton={"Registrar"}/>} 
+                      titleButton={"Registrar"} FormStyles={StylesFormproduct}/>} 
                       open={open} 
                       title="Ingrese Producto" 
                       handleClose={handleClose}/>
-        <ModalComponent elemento={<DynamicForm 
+        <ModalComponent elemento={<DynamicFormImg
+                      setPreview={setPreview}
+                      preview={preview}  
                       fields={ProductsFormfields} 
                       initialValues={updateData} 
-                      validationSchema={validationSchemaFormProduct}
+                      validationSchema={validationSchemaFormProductUpdate}
                       onSubmit={handleSubmitUpdate}
                       titleButton={"Actualizar"}/>} 
                       open={openUpdate} 

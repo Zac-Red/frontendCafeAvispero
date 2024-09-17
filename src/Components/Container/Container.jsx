@@ -23,7 +23,7 @@ export const Container = ({urls=[]}) => {
       {isMobile
         ? 
         <div className="mainContent">
-          <NavBar urls={urls}/> 
+          <NavBar urls={urls}/>
           <Outlet/> 
         </div>
         :

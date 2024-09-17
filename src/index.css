@@ -1,6 +1,11 @@
 body {
   margin: 0px;
   padding: 0px;
+  font-size: 18px;
+}
+
+button, select, input{
+  font-size: 18px !important;
 }
 
 .layout{

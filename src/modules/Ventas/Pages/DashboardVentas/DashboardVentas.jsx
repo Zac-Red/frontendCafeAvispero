@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ModalComponent } from "../../../../Components/Modal/ModalComponent"
 import Button from '@mui/material/Button';
 import * as Yup from "yup";
-import { DynamicForm } from "../../../../Components/Forms/DynamicForm ";
+import { DynamicForm } from "../../../../Components/Forms/DynamicForm";
 
 const columns = [
   {label: "nombre", value: "name"},

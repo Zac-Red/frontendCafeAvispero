@@ -45,7 +45,7 @@ export const TableDataCustom = ({ columns, page, setPage, rowsPerPage,
                     // console.log(new Date(row.updatedAt));
                     const value = column.value.split('.').reduce((o, i) => o[i], row);
                     return (
-                        <td key={index}>
+                        <td key={index} data-label={column.label}>
                           {value}
                         </td>
                       )})}

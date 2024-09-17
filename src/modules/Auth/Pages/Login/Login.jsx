@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useAuthStore from "../../../../store/AuthStore";
 import { RequestHTTP } from "../../../../httpServer";
-import { DynamicForm } from "../../../../Components/Forms/DynamicForm ";
+import { DynamicForm } from "../../../../Components";
 import { useNavigate } from "react-router-dom";
 import { Typography } from "@mui/material";
 import InputAdornment from '@mui/material/InputAdornment';

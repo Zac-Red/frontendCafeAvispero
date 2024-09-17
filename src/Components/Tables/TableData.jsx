@@ -40,7 +40,7 @@ export const TableData = ({columns, page, setPage, rowsPerPage,
                   {columns.map((column, index) => {
                     const value = column.value.split('.').reduce((o, i) => o[i], row);
                     return (
-                      <td key={index}>
+                      <td key={index} data-label={column.label}>
                         {typeof value === "boolean"? 
                           (value === true ? "Activo" : "Desactivado")
                           :
