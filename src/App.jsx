@@ -4,7 +4,7 @@ import { Inicio } from "./modules/Inicio/Inicio";
 import { DashBoardCompras } from "./modules/Compras/DashBoardCompras"
 import { LandingPage } from "./LandingPage/LandingPage"
 import { Container } from "./Components/Container/Container"
-import { ListUsers, Login, ReportUsersRoles, ReportsUsersActive } from "./modules/Auth/Pages";
+import { CardUser, ListUsers, Login, ReportUsersRoles, ReportsUsersActive } from "./modules/Auth/Pages";
 import { DashboardVentas, RegistroVenta, Ventas, ReporteVenta } from "./modules/Ventas/Pages";
 import { ListClients } from "./modules/Clientes";
 import { ListUnitMeasure } from "./modules/Common";
@@ -16,6 +16,7 @@ import useAuthStore from "./store/AuthStore";
 import AuthGuard from "./Guards/AuthGuard"
 import { DashBoardRawMaterial, ListRawMaterial } from "./modules/materiaprima";
 import './index.css'
+import { PublicGuard } from "./Guards/PublicGuard";
 
 function App() {
   const { isLoggedIn, checkAuth } = useAuthStore();
@@ -27,8 +28,10 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path="/" element={<LandingPage/>}/>
-        <Route path="/login" element={<Login/>}/>
+        <Route path="/" element={<PublicGuard userAuth={isLoggedIn} MainURLs={MainURLs}/>}>
+          <Route path="/" element={<LandingPage/>}/>
+          <Route path="/login" element={<Login/>}/>
+        </Route>
 
         <Route path="admin" element={<Navigate to="/admin/Inicio"/>}/>        
         <Route path="admin/ventas" element={<Navigate to="/admin/ventas/dashboard"/>}/>
@@ -65,6 +68,7 @@ function App() {
             <Route path="usuarios" element={<ListUsers/>}/>
             <Route path="reporte-activos" element={<ReportsUsersActive/>}/>
             <Route path="reporte-rol" element={<ReportUsersRoles/>}/>
+            <Route path="usuario/:userId" element={<CardUser/>}/>
           </Route>
 
           <Route path="productos/*" element={<Container urls={productosURLs}/>}>

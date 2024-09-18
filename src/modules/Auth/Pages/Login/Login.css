@@ -20,18 +20,13 @@
   justify-content: center;
 }
 
-.ContainerLogin .ContainerLogoLogin .LogoLogin {
-  background-color: white;
-  border-radius: 70%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .ContainerLogin 
 .ContainerLogoLogin 
 .LogoLogin img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
+  clip-path: circle(50%);
 }
 
 .FormLogin{

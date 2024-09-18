@@ -1,10 +1,11 @@
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import './TableData.css'
 
-const itemsPerPageOptions = [5, 10, 15];
+const itemsPerPageOptions = [5, 10, 20, 50];
 export const TableDataCustom = ({ columns, page, setPage, rowsPerPage, 
-    setRowsPerPage, updateFuntion, deleteFuntion, 
+    setRowsPerPage, updateFuntion, deleteFuntion, seeData, 
     refetch, isLoading, data}) => {
   
   const handleChangePage = (newPage) => {
@@ -52,6 +53,7 @@ export const TableDataCustom = ({ columns, page, setPage, rowsPerPage,
                   <td>
                     <button onClick={()=>{updateFuntion(row)}}><EditIcon/></button>
                     <button onClick={()=>{deleteFuntion(row)}}><DeleteIcon/></button>
+                    <button onClick={()=>{seeData(row)}}><RemoveRedEyeIcon/></button>
                   </td>
                 </tr>
               );

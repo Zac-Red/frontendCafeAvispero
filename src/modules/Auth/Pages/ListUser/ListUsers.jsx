@@ -1,5 +1,6 @@
 import ReactDom from 'react-dom';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import { TableDataCustom } from "../../../../Components/Tables/TableDataCustom";
 import useAuthStore from "../../../../store/AuthStore";
@@ -18,7 +19,6 @@ import {  DeleteElement, SearchElement, DynamicForm,
           ModalComponent } from "../../../../Components";
 import { getRoles } from "../../service/actions";
 import { fetchPagedData } from "../../../../Api/HttpServer";
-
 
 export const ListUsers = () => {
   const { token } = useAuthStore();
@@ -153,6 +153,10 @@ export const ListUsers = () => {
     handleOpenDelete();
   }
 
+  const navigate = useNavigate();
+  const SeeData = ({id}) => {
+    navigate(`/admin/usuarios/usuario/${id}`);
+  }
 
   const UserFormfields = [
     { 
@@ -236,7 +240,8 @@ export const ListUsers = () => {
           refetch={user.refetch}
           columns={UserColumns} 
           updateFuntion={handleUpdate} 
-          deleteFuntion={handledelete}/>
+          deleteFuntion={handledelete}
+          seeData={SeeData}/>
           : 
           <TableDataCustom
           data={userSearch.data}
@@ -248,7 +253,8 @@ export const ListUsers = () => {
           refetch={userSearch.refetch}
           columns={UserColumns} 
           updateFuntion={handleUpdate} 
-          deleteFuntion={handledelete}/>}
+          deleteFuntion={handledelete}
+          seeData={SeeData}/>}
         { ReactDom.createPortal(<>
         <ModalComponent elemento={<DynamicForm 
                       fields={UserFormfields} 

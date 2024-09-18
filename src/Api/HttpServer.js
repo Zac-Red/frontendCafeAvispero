@@ -15,3 +15,15 @@ export const fetchPagedData = async ({queryKey}) => {
   }
   return res;
 };
+
+export const fetchUnitData = async ({queryKey}) => {
+  const [_key, {url, token}] = queryKey;
+  const params = {
+    headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`
+    },
+  };
+  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}`, params).then((resp)=>resp.json())
+  return res;
+};
