@@ -12,9 +12,7 @@ export const Container = ({urls=[]}) => {
       setIsMobile(window.innerWidth <= 992);
     };
     window.addEventListener('resize', handleResize);
-    // Llamada inicial para configurar el estado
     handleResize();
-    // Limpiar el evento de escucha cuando el componente se desmonta
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
