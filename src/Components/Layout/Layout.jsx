@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom"
 import { NavBarMain } from "../NavBarMain/NavBarMain";
 import { SidebarPrincipal } from "../SideBarPrincipal/SideBarPrincipal";
+import { Loader } from "../Loader/Loader";
 
 export const Layout = ({MainURLs}) => {
   const [isMobile, setIsMobile] = useState(false);
@@ -10,25 +11,40 @@ export const Layout = ({MainURLs}) => {
       setIsMobile(window.innerWidth <= 992);
     };
     window.addEventListener('resize', handleResize);
-    // Llamada inicial para configurar el estado
     handleResize();
-    // Limpiar el evento de escucha cuando el componente se desmonta
     return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <>
-      {isMobile
-        ? 
-        <div className="layout">
-          <NavBarMain urls={MainURLs}/>
-          <Outlet/>
+      {loading ?
+        <div className="viewPortLoader">
+          <Loader/>
         </div>
         :
-        <div className="layout">
-          <SidebarPrincipal urls={MainURLs} activebar={true}/>
-          <Outlet/> 
-        </div>
+        <>
+          {isMobile
+            ? 
+            <div className="layout">
+              <NavBarMain urls={MainURLs}/>
+              <Outlet/>
+            </div>
+            :
+            <div className="layout">
+              <SidebarPrincipal urls={MainURLs} activebar={true}/>
+              <Outlet/> 
+            </div>
+          }
+        </>
       }
     </>
   )
