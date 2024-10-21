@@ -10,13 +10,13 @@ export const ventasURLs = [
     icon: <LeaderboardIcon/>
   },
   {
-    url: "/admin/ventas/registro",
+    url: "/admin/ventas/registrar",
     name: "Registrar venta",
     icon: <AddShoppingCartIcon/>
   },
   {
-    url: "/admin/ventas/mantenimiento",
-    name: "Mantenimiento",
+    url: "/admin/ventas/ventas",
+    name: "Ventas",
     icon: <HandymanIcon/>
   },
   {
