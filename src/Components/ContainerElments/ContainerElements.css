@@ -1,0 +1,11 @@
+.ElementsForProcess{
+  max-height: 80vh;
+  display: grid;
+  gap: 1rem;
+  grid-auto-rows: 20rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 20rem), 1fr));
+  align-items: center;
+  justify-items: center;
+  overflow-y: scroll;
+  padding: 25px;
+}
