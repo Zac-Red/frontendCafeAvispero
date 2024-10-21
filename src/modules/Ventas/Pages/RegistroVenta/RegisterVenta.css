@@ -1,0 +1,11 @@
+.containerProcess{
+  display: grid;
+  height: 100%;
+  grid-template-columns: auto 25%;
+}
+/***/
+@media only screen and (max-width: 992px) {
+  .containerProcess {
+    grid-template-columns: 100%;
+  }
+}
