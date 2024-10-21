@@ -1,0 +1,23 @@
+/*Pagina de error*/
+.page_404{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;  
+  padding: 40px 0;
+  width: auto;
+  background: #fff;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.page_404 img{
+  width: 100%;
+}
+.gif_image{
+  background: url(./dribbble_1.gif);
+  background-repeat: no-repeat;
+  height: 400px;
+  background-position: center;
+}
+.content_box_404{
+  margin-top: -50px;
+}
