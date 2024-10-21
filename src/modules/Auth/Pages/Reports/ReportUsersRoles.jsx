@@ -1,9 +1,14 @@
 import { useState } from "react";
 import { useQuery } from '@tanstack/react-query';
 import { TableData } from "../../../../Components/Tables/TableData";
+import Typography from '@mui/material/Typography';
+
 import { SearchElement } from "../../../../Components/SearchElement/SearchElement";
 import { UserSearchReportRole } from "../../Helpers/UserSearch";
 
+import { generarPDF } from "../../../Reports/utils/GeneretReport";
+import { GetLogoReport } from "../../../../Hooks";
+import { ButtonDownload } from "../../../../Components/ButtonDownload/ButtonDownload";
 
 const columns = [
   {label: "Nombre", value: "firstname"},
@@ -35,8 +40,20 @@ export const ReportUsersRoles = () => {
     queryFn: fetchPagedData, enabled: false  
   });
 
+  const { logoBase64 } = GetLogoReport();
+
   return (
     <div className="ContainerCustom">
+      <Typography variant="h3" gutterBottom>Usuarios por rol</Typography>
+      { (userSearch.data?.items) &&
+        <ButtonDownload action={()=>generarPDF({
+          nameReport: "reporte de usuarios-rol",
+          detailReport: "A continuación se presentan los usuarios por rol en el sistema",
+          logoBase64,
+          tableHeader: columns,
+          tableRows: userSearch.data.items
+        })} />
+      }
       <SearchElement 
         inputValue={inputValue} 
         setInputValue={setInputValue}
