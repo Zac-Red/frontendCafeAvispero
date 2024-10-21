@@ -1,10 +1,10 @@
 import { TextField } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import { useFormik } from "formik";
+import FormStyles from './Forms.module.css';
 import * as Yup from "yup";
-import './Forms.css';
 
-export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields, titleButton, ButtonStyles, FormStyles }) => {
+export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields, titleButton, StylesForm, StylesButton }) => {
   const formik = useFormik({
     initialValues: initialValues,
     validationSchema: Yup.object(validationSchema),
@@ -14,9 +14,9 @@ export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields,
   });
 
   return (
-    <div style={FormStyles}>
+    <div className={FormStyles[StylesForm]}>
       <form onSubmit={formik.handleSubmit}>
-        {fields.map(({ name, label, type, placeholder, inputProps, isSelect, options }) => (
+        {fields.map(({ name, label, type, placeholder, inputProps, inpulabel, isSelect, options }) => (
           <TextField
             key={name}
             name={name}
@@ -29,9 +29,9 @@ export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields,
             helperText={formik.touched[name] && formik.errors[name]}
             margin="normal"
             fullWidth
+            InputLabelProps={inpulabel || {}}
             InputProps={inputProps || {}}
-            select={isSelect || false}
-          >
+            select={isSelect || false}>
             {isSelect && options && options.map((option) => (
               <MenuItem key={option.value} value={option.value}>
                 {option.label}
@@ -39,7 +39,7 @@ export const DynamicForm = ({ initialValues, validationSchema, onSubmit, fields,
             ))}
           </TextField>
         ))}
-        <button type="submit" style={ButtonStyles}>{titleButton}</button>
+        <button type="submit" className={FormStyles[StylesButton]}>{titleButton}</button>
       </form>
     </div>
   );
