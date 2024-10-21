@@ -1,5 +1,6 @@
 import ReactDom from 'react-dom';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import useAuthStore from '../../../../store/AuthStore';
 import { DeleteElement, DynamicForm, FeedSnackBar, ModalComponent, SearchElement, TableDataCustom } from '../../../../Components';
@@ -8,6 +9,7 @@ import { SuplierFormfields, initialValuesCreatedSuplier, validationSchemaFormSup
 import { SupplierSearchOptions } from '../../Helpers/SupplierSearch';
 import { SupplierColumns } from '../../Helpers/SupplierTable.helper';
 import { fetchPagedData } from '../../../../Api/HttpServer';
+import { formatSupplier } from '../../utils/FormatSupplier';
 
 export const ListSupplier = () => {
   const { token } = useAuthStore();
@@ -90,7 +92,7 @@ export const ListSupplier = () => {
   };
   
   const handleSubmiteDelete = async () => {
-    const response = await RequestHTTP(`/supplier/${idSuplier}`,"DELETE", {}, token);
+    const response = await RequestHTTP(`/suppliers/${idSuplier}`,"DELETE", {}, token);
     if (response.sucess) {
       handleCloseDelete();
       setMessage("Registro eliminado con éxito");
@@ -121,9 +123,18 @@ export const ListSupplier = () => {
     handleOpenDelete();
   }
 
+  const navigate = useNavigate();
+  const SeeData = ({id}) => {
+    navigate(`/admin/proveedores/proveedor/${id}`);
+  }
+
   return (
     <div className="ContainerCustom">
-      <button onClick={()=>handleOpen()}>Registrar Proveedor</button>
+      <button className="topButton" onClick={() => handleOpen()}>
+        <span className="topButtontransition"></span>
+        <span className="topButtongradient"></span>
+        <span className="topButtonlabel">Registrar Proveedor</span>
+      </button>
       <SearchElement 
         inputValue={inputValue} 
         setInputValue={setInputValue}
@@ -140,9 +151,11 @@ export const ListSupplier = () => {
         setPage={setPage}
         setRowsPerPage={setRowsPerPage}
         refetch={supplier.refetch}
-        columns={SupplierColumns} 
+        columns={SupplierColumns}
+        formatData={formatSupplier} 
         updateFuntion={handleUpdate} 
-        deleteFuntion={handledelete}/>
+        deleteFuntion={handledelete}
+        seeData={SeeData}/>
         : 
         <TableDataCustom
         data={supplierSearch.data}
@@ -152,9 +165,11 @@ export const ListSupplier = () => {
         setPage={setPage}
         setRowsPerPage={setRowsPerPage}
         refetch={supplierSearch.refetch}
-        columns={SupplierColumns} 
+        columns={SupplierColumns}
+        formatData={formatSupplier} 
         updateFuntion={handleUpdate} 
-        deleteFuntion={handledelete}/>}
+        deleteFuntion={handledelete}
+        seeData={SeeData}/>}
       { ReactDom.createPortal(<>
       <ModalComponent elemento={<DynamicForm 
                     fields={SuplierFormfields} 

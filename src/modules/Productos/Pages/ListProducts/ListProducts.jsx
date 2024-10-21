@@ -1,17 +1,19 @@
 import ReactDom from 'react-dom';
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from '@tanstack/react-query';
 import useAuthStore from "../../../../store/AuthStore";
 import { fetchPagedData } from "../../../../Api/HttpServer";
-import { initialValuesCreatedProduct, validationSchemaFormProduct, validationSchemaFormProductUpdate, valuesUpdateProduct } from "../../Helpers/ProductForm.helper";
+import { initialValuesCreatedProduct, validationSchemaFormProduct, 
+  validationSchemaFormProductUpdate, valuesUpdateProduct } from "../../Helpers/ProductForm.helper";
 import { DeleteElement, FeedSnackBar, ModalComponent, SearchElement, TableDataCustom } from "../../../../Components";
 import { RequestHTTP } from '../../../../httpServer';
 import { ProductColumns } from '../../Helpers/ProductTable.helper';
-import { useQuery } from '@tanstack/react-query';
 import { ProductSearchOptions } from '../../Helpers/ProductSearch';
 import { DynamicFormImg } from '../../../../Components/Forms/DynamicFormImg';
-import axios from 'axios';
-import { StylesFormproduct } from '../../utils/Styles';
 import { getUnitMeasure } from '../../../Common';
+import { formatProduct } from '../../utils/FormatProduct';
+import axios from 'axios';
 
 export const ListProducts = () => {
   const { token } = useAuthStore();
@@ -189,6 +191,11 @@ export const ListProducts = () => {
   }
 
 
+  const navigate = useNavigate();
+  const SeeData = ({id}) => {
+    navigate(`/admin/productos/producto/${id}`);
+  }
+
   const ProductsFormfields = [
     {
       name: "name",
@@ -219,7 +226,11 @@ export const ListProducts = () => {
   
   return (
     <div className="ContainerCustom">
-      <button onClick={()=>handleOpen()}>Registrar producto</button>
+      <button className="topButton" onClick={() => handleOpen()}>
+        <span className="topButtontransition"></span>
+        <span className="topButtongradient"></span>
+        <span className="topButtonlabel">Registrar producto</span>
+      </button>
         <SearchElement 
           inputValue={inputValue} 
           setInputValue={setInputValue}
@@ -236,9 +247,11 @@ export const ListProducts = () => {
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
           refetch={product.refetch}
-          columns={ProductColumns} 
+          columns={ProductColumns}
+          formatData={formatProduct} 
           updateFuntion={handleUpdate} 
-          deleteFuntion={handledelete}/>
+          deleteFuntion={handledelete}
+          seeData={SeeData}/>
           : 
           <TableDataCustom
           data={productSearch.data}
@@ -248,9 +261,11 @@ export const ListProducts = () => {
           setPage={setPage}
           setRowsPerPage={setRowsPerPage}
           refetch={productSearch.refetch}
-          columns={ProductColumns} 
+          columns={ProductColumns}
+          formatData={formatProduct} 
           updateFuntion={handleUpdate} 
-          deleteFuntion={handledelete}/>}
+          deleteFuntion={handledelete}
+          seeData={SeeData}/>}
         { ReactDom.createPortal(<>
         <ModalComponent elemento={<DynamicFormImg 
                       setPreview={setPreview}
@@ -259,9 +274,10 @@ export const ListProducts = () => {
                       initialValues={initialValuesCreatedProduct} 
                       validationSchema={validationSchemaFormProduct}
                       onSubmit={handleSubmit}
-                      titleButton={"Registrar"} FormStyles={StylesFormproduct}/>} 
+                      titleButton={"Registrar"} 
+                      StylesForm="FormProduct"/>} 
                       open={open} 
-                      title="Ingrese Producto" 
+                      title="Ingrese producto" 
                       handleClose={handleClose}/>
         <ModalComponent elemento={<DynamicFormImg
                       setPreview={setPreview}
@@ -270,7 +286,8 @@ export const ListProducts = () => {
                       initialValues={updateData} 
                       validationSchema={validationSchemaFormProductUpdate}
                       onSubmit={handleSubmitUpdate}
-                      titleButton={"Actualizar"}/>} 
+                      titleButton={"Actualizar"} 
+                      StylesForm="FormProduct"/>} 
                       open={openUpdate} 
                       title="Actualizar producto" 
                       handleClose={handleCloseUpdate}/>
