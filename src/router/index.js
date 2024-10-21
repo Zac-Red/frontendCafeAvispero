@@ -1,3 +1,4 @@
+export { Produccion } from "./Produccion";
 export { materiaprimaURLs } from "./MateriaPrima";
 export { productosURLs } from "./Productos";
 export { proveedoresURLs } from "./Proveedores";
