@@ -57,6 +57,8 @@
 .pagination{
   display: flex;
   gap: 5px;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
 }
 
 .pagination span{
@@ -103,5 +105,9 @@
     font-weight: bold;
     text-transform: uppercase;
     float: left;
+  }
+  
+  .pagination :nth-child(n):last-child {
+    order: -1;
   }
 }
