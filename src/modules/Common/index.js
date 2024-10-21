@@ -1,2 +1,2 @@
 export { getUnitMeasure } from "./services/actions";
-export { ListUnitMeasure } from "./Page";
+export { ListUnitMeasure, Error404, InventoryMoves } from "./Page";
