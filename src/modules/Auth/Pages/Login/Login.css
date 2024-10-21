@@ -10,7 +10,7 @@
   align-items: center;
   width: 50%;
   border-radius: 15px;
-  background-image: url("./CofeeLogin.jpg");
+  background-image: url("CofeeLogin.jpg");
   background-repeat: no-repeat;
   background-size: cover;
 }
@@ -37,4 +37,29 @@
   justify-content: center;
   background-color: #E3D7BF;
   border-radius: 25px;
+}
+.samllLogo-Login{
+  display: none;
+}
+@media only screen and (max-width: 768px) {
+  .ContainerLogin {
+    flex-direction: column;
+  }
+  .ContainerLogin .ContainerLogoLogin{
+    display: none;
+  }
+  .samllLogo-Login{
+    display: flex;
+  }
+  .samllLogo-Login img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    clip-path: circle(50%);
+  }
+  
+  .FormLogin{
+    width: 100%;
+    height: 100vh;
+  }
 }

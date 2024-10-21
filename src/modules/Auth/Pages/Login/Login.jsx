@@ -95,6 +95,9 @@ export const Login = () => {
         </div>
       </div>
       <div className="FormLogin">
+        <div className="samllLogo-Login">
+          <img src="/logo-coffe.png" alt="Café El Avispero"/>
+        </div>
         <Typography variant="h5">
           Iniciar sesión
         </Typography>
@@ -104,15 +107,17 @@ export const Login = () => {
           validationSchema={validationSchema} 
           onSubmit={handleSession} 
           titleButton="Iniciar sesión"
-          ButtonStyles={stylesbuttonLogin}/>
+          ButtonStyles={stylesbuttonLogin}
+          StylesForm={"FormLogin"}
+          StylesButton={"FormLoginBtn"}/>
       </div>
       <FeedSnackBar 
-          Close={handleCloseSnack} 
-          message={Message} 
-          open={openSnack} 
-          vertical={'bottom'} 
-          horizontal={'center'} 
-          type={typeSnack}/>
+        Close={handleCloseSnack} 
+        message={Message} 
+        open={openSnack} 
+        vertical={'bottom'} 
+        horizontal={'center'} 
+        type={typeSnack}/>
     </div>
   )
 }
