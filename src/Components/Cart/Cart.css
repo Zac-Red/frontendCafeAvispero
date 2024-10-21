@@ -1,0 +1,106 @@
+.CartEmpty {
+  text-align: center;
+  border-radius: 50px;
+  background: #e0e0e0;
+  width: 50%;
+}
+
+.CartContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+  background-color: #E3D7BF;  
+}
+
+.ActionsProcess {
+  padding: 10px;
+  display: flex;
+  gap: 20px;
+}
+
+.btnCancelProcess {
+  padding: 17px 40px;
+  border-radius: 10px;
+  border: 0;
+  background-color: rgb(255, 56, 86);
+  letter-spacing: 1.5px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: rgb(201, 46, 70) 0px 10px 0px 0px;
+  color: hsl(0, 0%, 100%);
+  cursor: pointer;
+}
+
+.btnCancelProcess:hover {
+  box-shadow: rgb(201, 46, 70) 0px 7px 0px 0px;
+}
+
+.btnCancelProcess:active {
+  background-color: rgb(255, 56, 86);
+  box-shadow: rgb(201, 46, 70) 0px 0px 0px 0px;
+  transform: translateY(5px);
+  transition: 200ms;
+}
+
+.btnAcceptProcess {
+  padding: 17px 40px;
+  border-radius: 10px;
+  border: 0;
+  background-color: rgb(56, 122, 255);
+  letter-spacing: 1.5px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: rgb(46, 92, 201) 0px 10px 0px 0px;
+  color: hsl(0, 0%, 100%);
+  cursor: pointer;
+}
+
+.btnAcceptProcess:hover {
+  box-shadow: rgb(46, 92, 201) 0px 7px 0px 0px;
+}
+
+.btnAcceptProcess:active {
+  background-color: rgb(56, 122, 255);
+  box-shadow: rgb(46, 92, 201) 0px 0px 0px 0px;
+  transform: translateY(5px);
+  transition: 200ms;
+}
+
+.btnCart{
+  padding: 17px 40px;
+  border-radius: 10px;
+  border: 0;
+  background-color: rgb(56, 122, 255);
+  letter-spacing: 1.5px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: rgb(46, 92, 201) 0px 10px 0px 0px;
+  color: hsl(0, 0%, 100%);
+  cursor: pointer;
+  margin-left: 30px;
+}
+
+.btnCart:hover {
+  box-shadow: rgb(46, 92, 201) 0px 7px 0px 0px;
+}
+
+.btnCart:active {
+  background-color: rgb(56, 122, 255);
+  box-shadow: rgb(46, 92, 201) 0px 0px 0px 0px;
+  transform: translateY(5px);
+  transition: 200ms;
+}
+
+.navshowcart {
+  background-color: #E3D7BF;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding-left: 20px;
+  height: 100px;
+  border-radius: 50px;
+  border: 2px solid black;
+  margin-left: 5px;
+  margin-right: 5px;
+}
