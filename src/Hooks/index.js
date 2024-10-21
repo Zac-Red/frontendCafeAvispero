@@ -1,0 +1,1 @@
+export { GetLogoReport } from "./GetLogoReport";
