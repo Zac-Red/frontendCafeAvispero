@@ -2,9 +2,10 @@ import { TextField } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import './Forms.css';
+import FormStyles from './Forms.module.css';
 
-export const DynamicFormImg = ({ initialValues, validationSchema, onSubmit, fields, titleButton, ButtonStyles, FormStyles, preview, setPreview}) => {
+export const DynamicFormImg = ({ initialValues, validationSchema, onSubmit, fields, 
+  titleButton, StylesForm, StylesButton, preview, setPreview}) => {
 
   const handleImageChange = (e, setFieldValue) => {
     const file = e.currentTarget.files[0];
@@ -26,7 +27,7 @@ export const DynamicFormImg = ({ initialValues, validationSchema, onSubmit, fiel
     },
   });
   return (
-    <div style={FormStyles}>
+    <div className={FormStyles[StylesForm]}>
       <form onSubmit={formik.handleSubmit}>
         {fields.map(({ name, label, type, placeholder, inputProps, isSelect, options }) => (
           <TextField
@@ -61,7 +62,7 @@ export const DynamicFormImg = ({ initialValues, validationSchema, onSubmit, fiel
           <div>
             {preview && <img src={preview} alt="Previsualización" style={{ width: '200px' }} />}
           </div>
-        <button type="submit" style={ButtonStyles}>{titleButton}</button>
+        <button type="submit" className={FormStyles[StylesButton]}>{titleButton}</button>
       </form>
     </div>
   );
