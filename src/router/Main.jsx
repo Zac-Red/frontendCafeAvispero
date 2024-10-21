@@ -5,7 +5,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import SensorOccupiedIcon from '@mui/icons-material/SensorOccupied';
 import CategoryIcon from '@mui/icons-material/Category';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-// import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
+import PrecisionManufacturingIcon from '@mui/icons-material/PrecisionManufacturing';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 
 export const MainURLs = [
@@ -16,45 +16,51 @@ export const MainURLs = [
     icon: <HomeIcon/>
   },
   {
-    url: "/admin/ventas",
+    url: "/admin/ventas/dashboard",
     name: "Ventas",
     label: "Modulo de Ventas",
     icon: <AttachMoneyIcon/>
   },
   {
-    url: "/admin/compras",
+    url: "/admin/compras/dashboard",
     name: "Compras",
     label: "Modulo de Compras",
     icon: <ShoppingCartIcon/>
   },
   {
-    url: "/admin/usuarios",
+    url: "/admin/usuarios/usuarios",
     name: "Usuarios",
     label: "Modulo de Usuarios",
     icon: <PeopleAltIcon/>
   },
   {
-    url: "/admin/clientes",
+    url: "/admin/clientes/clientes",
     name: "Clientes",
     label: "Modulo de Clientes",
     icon: <SensorOccupiedIcon/>
   },
   {
-    url: "/admin/proveedores",
+    url: "/admin/proveedores/proveedores",
     name: "Proveedores",
     label: "Modulo de Proveedores",
     icon: <AccountBoxIcon/>
   },
   {
-    url: "/admin/productos",
+    url: "/admin/productos/dashboard",
     name: "Productos",
     label: "Modulo de productos",
     icon: <CategoryIcon/>
   },
   {
-    url: "/admin/materiaprima",
+    url: "/admin/materiaprima/dashboard",
     name: "Materia prima",
     label: "Modulo de materia prima",
     icon: <AgricultureIcon/>
+  },
+  {
+    url: "/admin/produccion/dashboard",
+    name: "Producción",
+    label: "Modulo de produción",
+    icon: <PrecisionManufacturingIcon/>
   },
 ]
