@@ -1,3 +1,10 @@
+export { DefaultButton } from "./DefaultButton/DefaultButton";
+export { ButtonDownload } from "./ButtonDownload/ButtonDownload";
+export { Loader } from "./Loader/Loader";
+export { CardProduction } from "./CardProduction/CardProduction";
+export { TableSeeDetails } from "./Tables/TableSeeDetails";
+export { Card } from "./Card/Card";
+export { TableSetData } from "./Tables/TableSetData";
 export { SearchElement } from "./SearchElement/SearchElement";
 export { DeleteElement } from "./DeleteElement/DeleteElement";
 export { TableDataCustom } from "./Tables/TableDataCustom";
