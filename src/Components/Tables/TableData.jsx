@@ -54,17 +54,14 @@ export const TableData = ({columns, page, setPage, rowsPerPage,
         </table>
       </div>
       <div className="pagination">
-        <button onClick={() => handleChangePage( page - 1)} disabled={page === 1}>
+        <button className='paginationBTN' onClick={() => handleChangePage(page - 1)} disabled={page === 1}>
           Previo
         </button>
-
         <span>Pagina {page} de {data.totalPages}</span>
-
-        <button onClick={() => handleChangePage(page + 1)} disabled={page === data.totalPages}>
+        <button className='paginationBTN' onClick={() => handleChangePage(page + 1)} disabled={page === data.totalPages}>
           Next
         </button>
-
-        <select value={rowsPerPage} onChange={handleChangeRowsPerPage}>
+        <select className='select-items-per-page' value={rowsPerPage} onChange={handleChangeRowsPerPage}>
           {itemsPerPageOptions.map((option) => (
             <option key={option} value={option}>
               {option} items por pagina
