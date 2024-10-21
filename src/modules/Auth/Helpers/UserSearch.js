@@ -2,8 +2,6 @@ export const UserSearchOptions = [
   {option: "Nombre", value: "firstname"},
   {option: "Correo", value: "email"},
   {option: "Apellido", value: "lastname"},
-  {option: "Dpi", value: "dpi"}, 
-  {option: "Telefono", value: "phone"},
   {option: "Rol", value: "roles"},
 ];
 
