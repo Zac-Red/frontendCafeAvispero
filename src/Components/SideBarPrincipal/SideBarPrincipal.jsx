@@ -24,7 +24,7 @@ export const SidebarPrincipal = ({urls=[], activebar}) => {
         <ul className="sidebarPrincipal-items">
           {urls.map(( value, key )=>
             <li className="sidebarPrincipal-text" key={key}>
-              <NavLink className={ ({isActive}) => `Nav-item ${isActive ? 'active' : ''}`}  to={value.url} >{value.icon}{value.name}</NavLink>
+              <NavLink className={ ({isActive}) => `Nav-item ${isActive ? 'active' : ''}`}  to={value.url}>{value.icon}{value.name}</NavLink>
             </li>
           )}
           <li className="sidebarPrincipal-text"><button onClick={()=>singOut()}><LogoutIcon/></button></li>
