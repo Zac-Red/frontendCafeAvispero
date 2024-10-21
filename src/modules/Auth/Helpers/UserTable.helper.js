@@ -5,4 +5,5 @@ export const UserColumns = [
   {label: "Dpi", value: "dpi"}, 
   {label: "Telefono", value: "phone"},
   {label: "Rol", value: "roleId.role"},
+  {label: "Estado", value: "estado"},
 ];
