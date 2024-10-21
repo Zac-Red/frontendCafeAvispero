@@ -1,3 +1,4 @@
+export { CardVentas } from "./CardVentas/CardVentas";
 export { DashboardVentas } from "./DashboardVentas/DashboardVentas";
 export { RegistroVenta } from "./RegistroVenta/RegistroVenta";
 export { ReporteVenta } from "./Report/ReporteVenta";
