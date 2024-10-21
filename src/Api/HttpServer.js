@@ -16,7 +16,7 @@ export const fetchPagedData = async ({queryKey}) => {
   return res;
 };
 
-export const fetchUnitData = async ({queryKey}) => {
+export const fetchByOneData = async ({queryKey}) => {
   const [_key, {url, token}] = queryKey;
   const params = {
     headers: {
@@ -25,5 +25,17 @@ export const fetchUnitData = async ({queryKey}) => {
     },
   };
   let res = await fetch(`${import.meta.env.VITE_API_URL}${url}`, params).then((resp)=>resp.json())
+  return res;
+};
+
+export const fetchReportData = async ({queryKey}) => {
+  const [_key, {url, token, startOfCurrentMonth,  endOfCurrentMonth}] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?startOfCurrentMonth=${startOfCurrentMonth}&endOfCurrentMonth=${endOfCurrentMonth}`, params).then((resp)=>resp.json())
   return res;
 };
