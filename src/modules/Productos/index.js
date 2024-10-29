@@ -1,2 +1,2 @@
-export { ListProducts, DashBoardProduct, KardexProduct } from "./Pages";
-
+export { ListProducts, DashBoardProduct, KardexProduct, 
+  ReportTopSalesProduct, CardProduct } from "./Pages";

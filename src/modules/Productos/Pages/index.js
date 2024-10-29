@@ -1,3 +1,4 @@
+export { CardProduct } from "./CardProduct/CardProduct";
 export { ReportTopSalesProduct } from "./Reports/ReportTopSalesProduct";
 export { KardexProduct } from "./kardexProduct/KardexProduct";
 export { ListProducts } from "./ListProducts/ListProducts";

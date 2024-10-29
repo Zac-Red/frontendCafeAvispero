@@ -1,6 +1,6 @@
 export const RawMaterialColumns = [
   {label: "Nombre", value: "name"},
-  {label: "Stock", value: "stock"},
+  {label: "Stock", value: "newstock"},
   {label: "Precio", value: "price"},
   {label: "Unidad", value: "unitmeasureId.name"},
   {label: "Creado en", value: "newCreatedAt"}, 

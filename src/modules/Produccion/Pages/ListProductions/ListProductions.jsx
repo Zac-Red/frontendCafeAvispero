@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from "react-router-dom";
 import { SearchElement, TableDataCustom } from "../../../../Components";
@@ -6,8 +6,10 @@ import { fetchPagedData } from "../../../../Api/HttpServer";
 import { ProductionSearchOptions } from "../../Helpers/ProductionSearch";
 import { ProductionsColumns } from "../../Helpers/ProductionColumnsTable";
 import { formatProduction } from "../../utils/FormatProduction";
+import useAuthStore from "../../../../store/AuthStore";
 
 export const ListProductions = () => {
+  const { token } = useAuthStore();
 
   const [selectedOption, setSelectedOption] = useState('');
   const [inputValue, setInputValue] = useState('');
@@ -16,19 +18,30 @@ export const ListProductions = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const productionSearch = useQuery({
-    queryKey: ['productionSearch', { url: "/productions", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['productionSearch', { url: "/productions", page, rowsPerPage, selectedOption, 
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const production = useQuery({
-    queryKey: ['production', { url: "/productions", page, rowsPerPage }],
-    queryFn: fetchPagedData,
+    queryKey: ['production', { url: "/productions", page, rowsPerPage, token }],
+    queryFn: fetchPagedData, enabled: inputValue ? false : true
   });
 
   const navigate = useNavigate();
 
   const handleOpen = () => {
     navigate('/admin/produccion/registrar-produccion')
+  }
+  
+  useEffect(() => {
+    if (inputValue) {
+      productionSearch.refetch();
+    }
+  }, [page, rowsPerPage]);
+
+  if (production.data?.statusCode === 401 || productionSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
   }
 
   return (

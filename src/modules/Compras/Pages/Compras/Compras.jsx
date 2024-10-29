@@ -6,8 +6,10 @@ import { fetchPagedData } from "../../../../Api/HttpServer";
 import { ComprasSearchOptions } from "../../Helpers/ComprasSearch";
 import { ShoppingColumns } from "../../Helpers/ComprasColumnsTable";
 import { formatShopping } from "../../utils/FormatCompras";
+import useAuthStore from "../../../../store/AuthStore";
 
 export const Compras = () => {
+  const { token } = useAuthStore();
   const [selectedOption, setSelectedOption] = useState('');
   const [inputValue, setInputValue] = useState('');
 
@@ -15,12 +17,13 @@ export const Compras = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const shoppingSearch = useQuery({
-    queryKey: ['shoppingSearch', { url: "/shopping", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['shoppingSearch', { url: "/shopping", page, rowsPerPage, selectedOption, 
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const shopping = useQuery({
-    queryKey: ['shopping', { url: "/shopping", page, rowsPerPage }],
+    queryKey: ['shopping', { url: "/shopping", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
@@ -34,6 +37,10 @@ export const Compras = () => {
     navigate(`/admin/compras/compra/${id}`);
   }
 
+  if (shopping.data?.statusCode === 401 || shoppingSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
+  
   return (
     <div className="ContainerCustom">
       <button className="topButton" onClick={() => handleOpen()}>

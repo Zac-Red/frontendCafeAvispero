@@ -2,6 +2,7 @@ body {
   margin: 0px;
   padding: 0px;
   font-size: 18px;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }
 
 button, select, input{
@@ -73,39 +74,68 @@ button, select, input{
 
 .ContainerCustom{
   gap: 20px;
-  padding-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+  height: auto;
 }
 
 .ContainerCustomReport{
   gap: 20px;
-  padding-top: 20px;
   display: flex;
   align-items: center;
   flex-direction: column;
   background-color: #c0a88e;
   border-radius: 5px;
-  max-height: 100vh;
+  height: auto;
 }
 .ContainerSearchReport{
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 100px;
+}
+.ContainerSearchReport button{
+  background-color: #6f3f1e;
+  border-radius: 20px;
+  padding: 10px;
+  color: #FFF;
 }
 
 .ContainerDashBoard{
   background-color: #FFF;
   gap: 20px;
-  padding-top: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
 }
+
+.DateDashboar{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+.containerbtndashboard{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 100px;
+}
+.containerbtndashboard button{
+  background-color: #6f3f1e;
+  border-radius: 20px;
+  padding: 10px;
+  color: #FFF;
+}
+
 .containerDatepikerdashboar{
   display: flex;
   align-items: center;
@@ -124,6 +154,24 @@ button, select, input{
   display: flex;
   justify-content: space-around;
 }
+
+/*Form images*/
+.image-preview-form {
+  width: 200px;  
+  height: 200px;  
+  border: 2px solid #ddd; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.image-preview-form img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; 
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
   .containerDatepikerdashboar{
@@ -131,15 +179,15 @@ button, select, input{
   }
 }
 
-/* Small devices (portrait tablets and large phones, 600px and up)
-@media only screen and (min-width: 600px) {
-  
-} */
-
 /* Medium devices (landscape tablets, 768px and up) */
 @media only screen and (min-width: 768px) {
   .layout {
     grid-template-columns: 100%;
+  }
+}
+@media only screen and (max-width: 992px) { 
+  .ContainerCustom{
+    padding-top: 100px;
   }
 }
 /* Large devices (laptops/desktops, 992px and up) */
@@ -149,11 +197,20 @@ button, select, input{
     max-height: 100vh;
     grid-template-columns: 13% auto;
   }
+  .ContainerDashBoard{
+    height: 100vh;
+    overflow-y: scroll;
+  }
+  .ContainerCustom{
+    height: 100vh;
+    overflow-y: scroll;
+  }
+  .ContainerCustomReport{
+    height: 100vh;
+    overflow-y: scroll;
+  }
 }
-/* Extra large devices (large laptops and desktops, 1200px and up)
-@media only screen and (min-width: 1200px) {
-  
-} */
+
 
 
 

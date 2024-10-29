@@ -3,6 +3,7 @@ import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import AgricultureIcon from '@mui/icons-material/Agriculture';
 import InventoryIcon from '@mui/icons-material/Inventory';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 export const materiaprimaURLs = [
   {
@@ -34,5 +35,10 @@ export const materiaprimaURLs = [
     url: "/admin/materiaprima/kardex",
     name: "Kardex de materia prima",
     icon: <InventoryIcon/>
+  },
+  {
+    url: "/admin/materiaprima/refinar-materiaprima",
+    name: "refinar materia prima",
+    icon: <AutoFixHighIcon/>
   },
 ]

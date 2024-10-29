@@ -3,6 +3,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import Avatar from '@mui/material/Avatar';
+import notImaga from './sinproduct.png'
+
 import './TableData.css'
 
 const itemsPerPageOptions = [5, 10, 20, 50];
@@ -12,6 +14,7 @@ export const TableDataCustom = ({ columns, formatData, page, setPage, rowsPerPag
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
+    // refetch()
   };
 
   const handleChangeRowsPerPage = (event) => {
@@ -49,22 +52,24 @@ export const TableDataCustom = ({ columns, formatData, page, setPage, rowsPerPag
                     const value = column.value.split('.').reduce((o, i) => o[i], newFormat);
                     return (
                       <td key={index} data-label={column.label}>
-                        {column.value === "url" ?
-                          <Avatar alt={value} src={value} />
+                        {
+                        (column.value === "url") ?
+                          value ? <Avatar alt={value} src={value} />
+                          : <Avatar alt={value} src={notImaga} />
                           : value}
                       </td>
                     )
                   })}
                   {(updateFuntion || deleteFuntion || seeData || setData) &&
-                    <td>
+                    <td className='optionstable'>
                       {updateFuntion &&
-                        <button onClick={() => { updateFuntion(row) }}><EditIcon/></button>}
+                        <button className='editbtnTable' onClick={() => { updateFuntion(row) }}><EditIcon/></button>}
                       {deleteFuntion &&
-                        <button onClick={() => { deleteFuntion(row) }}><DeleteIcon/></button>}
+                        <button className='deletebtnTable' onClick={() => { deleteFuntion(row) }}><DeleteIcon/></button>}
                       {seeData &&
-                        <button onClick={() => { seeData(row) }}><RemoveRedEyeIcon/></button>}
+                        <button className='seebtnTable' onClick={() => { seeData(row) }}><RemoveRedEyeIcon/></button>}
                       {setData &&
-                        <button onClick={() => { setData(row) }}><CheckCircleIcon/></button>}
+                        <button className='checkbtnTable' onClick={() => { setData(row) }}><CheckCircleIcon/></button>}
                     </td>
                   }
                 </tr>

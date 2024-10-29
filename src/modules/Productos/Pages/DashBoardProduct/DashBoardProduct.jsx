@@ -4,6 +4,7 @@ import { FormatSimpleDate } from "../../../../Utils/FormatElements";
 import useAuthStore from "../../../../store/AuthStore";
 import { fetchReportData } from "../../../../Api/HttpServer";
 
+import Typography from '@mui/material/Typography';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { TextField, Box } from '@mui/material';
@@ -29,6 +30,9 @@ export const DashBoardProduct = () => {
 
   const [startDateSearch, setStartDateSearch] = useState(null);
   const [endDateSearch, setEndDateSearch] = useState(null);
+
+  const [startdate, setstartdate] = useState(defaultStartDate);
+  const [enddate, setenddate] = useState(defaultEndDate);
 
   const formatChartData = (data) => {
     const dataKpi = data.map(item => formatPieKPITopSalesProducts(item));
@@ -59,20 +63,30 @@ export const DashBoardProduct = () => {
     enabled: searching
   });
 
+  const isUnauthorized = (response) => response?.data?.statusCode === 401;
+
   useEffect(() => {
-    const data = searching ? topProductsSearch.data : topProducts.data;
-    if (data) {
-      const formattedData = formatChartData(data);
-      setChartData(formattedData);
+    if (!isUnauthorized(topProductsSearch) && !isUnauthorized(topProducts)) {     
+      const data = searching ? topProductsSearch.data : topProducts.data;
+      if (data) {
+        const formattedData = formatChartData(data);
+        setChartData(formattedData);
+      }
     }
   }, [topProducts.data, topProductsSearch.data, searching]);
 
   const handleReport = () => {
-    setSearching(true);
-    topProductsSearch.refetch();
+    if (startDateSearch && endDateSearch) {
+      setstartdate(FormatSimpleDate(startDateSearch))
+      setenddate(FormatSimpleDate(endDateSearch))
+      setSearching(true);
+      topProductsSearch.refetch();
+    }
   };
 
   const clearReport = () => {
+    setstartdate(defaultStartDate)
+    setenddate(defaultEndDate);
     setStartDateSearch(null);
     setEndDateSearch(null);
     setSearching(false);
@@ -82,11 +96,17 @@ export const DashBoardProduct = () => {
     return <h1>Sin datos</h1>;
   }
   
+  if (topProducts.data?.statusCode === 401 || topProductsSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
+
   return (
     <div className='ContainerDashBoard'>
-      <button onClick={handleReport}>Buscar</button>
-      <button onClick={clearReport}>Limpiar</button>
-
+      <div className="containerbtndashboard">
+        <button onClick={handleReport}>Buscar</button>
+        <button onClick={clearReport}>Limpiar</button>
+      </div>
+      
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={es}>
         <div className='containerDatepikerdashboar'>
           <DatePicker
@@ -104,12 +124,23 @@ export const DashBoardProduct = () => {
           />
         </div>
       </LocalizationProvider>
+      <Typography variant="h3" gutterBottom>Productos con más ventas</Typography>
+      <div className="DateDashboar">
+        <Typography variant="h6" gutterBottom>
+          {`Fecha de inicio: ${startdate}`}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {`Fecha fin: ${enddate}`}
+        </Typography>
+      </div>
 
       <div className='containerChart'>
         <PieChart
           series={[
             {
               data: chartData.dataKpi,
+              highlightScope: { fade: 'global', highlight: 'item' },
+              faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
             },
           ]}
           width={700}

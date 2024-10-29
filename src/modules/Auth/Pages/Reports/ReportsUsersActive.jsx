@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import { ButtonDownload } from "../../../../Components/ButtonDownload/ButtonDownload";
 import { generarPDF } from "../../../Reports/utils/GeneretReport";
 import { GetLogoReport } from "../../../../Hooks";
+import useAuthStore from "../../../../store/AuthStore";
 
 const columns = [
   { label: "Nombre", value: "firstname" },
@@ -18,27 +19,36 @@ const columns = [
 
 
 const fetchPagedData = async ({ queryKey }) => {
-  const [_key, { url, page, rowsPerPage }] = queryKey;
-  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&IsActive=true`).then((resp) => resp.json())
+  const [_key, { url, page, rowsPerPage, token }] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&IsActive=true`, params)
+  .then((resp) => resp.json())
   return res;
 };
 
 
 export const ReportsUsersActive = () => {
+  const { token } = useAuthStore();
 
   const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const userSearch = useQuery({
-    queryKey: ['userSearch', { url: "/auth", page, rowsPerPage }],
+    queryKey: ['userSearch', { url: "/auth", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
   const { logoBase64 } = GetLogoReport();
 
-  if (!userSearch.data?.items) {
-    return <h1>Sin datos</h1>
+  if (userSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
   }
+
   return (
     <div className="ContainerCustom">
       <Typography variant="h3" gutterBottom>Usuarios Activos</Typography>

@@ -14,13 +14,17 @@ export const formatSales = (item) => {
 }
 
 export const formatSaleForCard = (item) => {
-  const newCreatedAt = FormatDate(item.sale.createdAt);
-  return[
-    {label: "ID", value: item.sale.id},
-    {label: "Cliente", value: item.sale.customerId.name},
-    {label: "Total de la venta:", value: item.sale.total},
-    {label: "Fecha de la venta:", value: newCreatedAt},
-  ]
+  if (item) {
+    const newCreatedAt = FormatDate(item.sale.createdAt);
+    return[
+      {label: "ID", value: item.sale.id},
+      {label: "Cliente", value: item.sale.customerId.name},
+      {label: "Total de la venta:", value: item.sale.total},
+      {label: "Fecha de la venta:", value: newCreatedAt},
+    ]
+  } else {
+    return []
+  }
 }
 
 export const formatDetailSale = (item) =>{

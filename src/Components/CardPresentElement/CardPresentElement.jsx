@@ -13,6 +13,7 @@ export const CardPresentElement = ({detail}) => {
           component="img"
           image={detail.url}
           alt={detail.name}
+          sx={{ height: 400, objectFit: 'contain',  }}
         />
         <CardContent>
           <Typography gutterBottom variant="h5" component="div">{detail.name}</Typography>
@@ -24,7 +25,7 @@ export const CardPresentElement = ({detail}) => {
           </Typography>
           <Typography gutterBottom variant="h6" component="div">
             Stock:
-            <Chip color="primary" label={detail.stock} 
+            <Chip color="primary" label={detail.stock? detail.stock : detail.newstock} 
               size="medium" 
               style={{fontSize: "18px", marginLeft: "5px"}}/>
           </Typography>

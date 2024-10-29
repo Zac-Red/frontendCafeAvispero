@@ -1,5 +1,6 @@
 import Avatar from '@mui/material/Avatar';
 import './TableData.css'
+import notImaga from './sinproduct.png'
 
 export const TableSeeDetails = ({ data, columns, formatData, }) => {
   if (!data) {
@@ -25,8 +26,10 @@ export const TableSeeDetails = ({ data, columns, formatData, }) => {
                     const value = column.value.split('.').reduce((o, i) => o[i], newFormat);
                     return (
                       <td key={index} data-label={column.label}>
-                        {column.value === "url" ?
-                          <Avatar alt={value} src={value} />
+                        {
+                        (column.value === "url") ?
+                          value ? <Avatar alt={value} src={value} />
+                          : <Avatar alt={value} src={notImaga} />
                           : value}
                       </td>
                     )

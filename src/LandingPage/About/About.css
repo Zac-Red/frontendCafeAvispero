@@ -39,3 +39,10 @@
 .sectAbout .socials a:hover{
   color: chocolate;
 }
+
+@media only screen and (max-width: 992px) { 
+  .sectAbout .history{
+    width: 90%;
+    text-align: justify;
+  }
+}

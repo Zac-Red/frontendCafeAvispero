@@ -34,7 +34,9 @@ export const ReportTopPorductsProductions = () => {
   const [startDateSearch, setStartDateSearch] = useState(null);
   const [endDateSearch, setEndDateSearch] = useState(null);
 
-
+  const [startdate, setstartdate] = useState(defaultStartDate);
+  const [enddate, setenddate] = useState(defaultEndDate);
+  
   const topproductions = useQuery({
     queryKey: ['topproductions', {
       url: "/productions/topproductions",
@@ -57,9 +59,10 @@ export const ReportTopPorductsProductions = () => {
     enabled: searching
   });
 
+  const isUnauthorized = (response) => response?.data?.statusCode === 401;
 
   useEffect(() => {
-    if (topproductionsSearch.data || topproductions.data) {
+    if (!isUnauthorized(topproductionsSearch) && !isUnauthorized(topproductions)) {  
       const data = searching ? topproductionsSearch.data : topproductions.data;
       if (data) {
         let reportdata = data.map((item) => formatReportTopProductsProductions(item))
@@ -69,11 +72,17 @@ export const ReportTopPorductsProductions = () => {
   }, [topproductions.data, topproductionsSearch.data, searching]);
 
   const handleReport = () => {
-    setSearching(true);
-    topproductionsSearch.refetch();
+    if (startDateSearch && endDateSearch) {
+      setstartdate(FormatSimpleDate(startDateSearch))
+      setenddate(FormatSimpleDate(endDateSearch))
+      setSearching(true);
+      topproductionsSearch.refetch();
+    }
   };
 
   const clearReport = () => {
+    setstartdate(defaultStartDate)
+    setenddate(defaultEndDate);
     setStartDateSearch(null);
     setEndDateSearch(null);
     setSearching(false);
@@ -83,6 +92,10 @@ export const ReportTopPorductsProductions = () => {
 
   if (!topproductions.data && !searching) {
     return <h1>Sin datos</h1>;
+  }
+
+  if (topproductions.data?.statusCode === 401 || topproductionsSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
   }
 
   return (
@@ -120,6 +133,14 @@ export const ReportTopPorductsProductions = () => {
         </div>
       </LocalizationProvider>
       <Typography variant="h3" gutterBottom>Productos más producidos</Typography>
+      <div className="DateDashboar">
+        <Typography variant="h6" gutterBottom>
+          {`Fecha de inicio: ${startdate}`}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {`Fecha fin: ${enddate}`}
+        </Typography>
+      </div>
       <TableSeeDetails
         columns={ReportTopProductsProductionsColumns}
         data={Data}

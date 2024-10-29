@@ -6,8 +6,10 @@ import { fetchPagedData } from '../../../../Api/HttpServer';
 import { VentasSearchOptions } from '../../Helpers/VentasSearch';
 import { SalesColumns } from '../../Helpers/VentasColumnsTable';
 import { formatSales } from '../../utils/FormatVentas';
+import useAuthStore from "../../../../store/AuthStore";
 
 export const Ventas = () => {
+  const { token } = useAuthStore();
   const [selectedOption, setSelectedOption] = useState('');
   const [inputValue, setInputValue] = useState('');
 
@@ -15,12 +17,13 @@ export const Ventas = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const salesSearch = useQuery({
-    queryKey: ['salesSearch', { url: "/sales", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['salesSearch', { url: "/sales", page, rowsPerPage, selectedOption, 
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const sales = useQuery({
-    queryKey: ['sales', { url: "/sales", page, rowsPerPage }],
+    queryKey: ['sales', { url: "/sales", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
@@ -32,6 +35,10 @@ export const Ventas = () => {
 
   const SeeData = ({id}) => {
     navigate(`/admin/ventas/venta/${id}`);
+  }
+
+  if (sales.data?.statusCode === 401 || salesSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
   }
   return (
     <div className="ContainerCustom">

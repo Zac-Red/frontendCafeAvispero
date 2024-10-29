@@ -1,5 +1,5 @@
 import ReactDom from 'react-dom';
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import useAuthStore from "../../../../store/AuthStore";
@@ -9,14 +9,14 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import IconButton from '@mui/material/IconButton';
-import './ListUsers.css';
 import { RequestHTTP } from "../../../../httpServer";
 import { UserSearchOptions } from "../../Helpers/UserSearch";
 import {DeleteElement, SearchElement, DynamicForm,
-  ModalComponent, Loader, FeedSnackBar, TableDataCustom} from "../../../../Components";
+  ModalComponent, FeedSnackBar, TableDataCustom} from "../../../../Components";
 import { getRoles } from "../../service/actions";
 import { fetchPagedData } from "../../../../Api/HttpServer";
 import { formatUser } from '../../utils/FormatUser';
+import './ListUsers.css';
 
 export const ListUsers = () => {
   const { token } = useAuthStore();
@@ -28,12 +28,13 @@ export const ListUsers = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const userSearch = useQuery({
-    queryKey: ['userSearch', { url: "/auth", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['userSearch', { url: "/auth", page, rowsPerPage, token, 
+    selectedOption, inputValue }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const user = useQuery({
-    queryKey: ['users', { url: "/auth", page, rowsPerPage }],
+    queryKey: ['users', { url: "/auth", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
@@ -87,19 +88,6 @@ export const ListUsers = () => {
       setTypeSnack("error");
       handleOpenSnack();
     }
-    // userMutation.mutate({url:"/auth/create", formData, token });
-    // console.log(userMutation);
-    // if (userMutation.isSuccess) {
-    //   handleClose();
-    //   setMessage("Registro ingresado con éxito");
-    //   setTypeSnack("success");
-    //   handleOpenSnack();
-    //   refetch();
-    // }else{
-    //   setMessage(`${userMutation.error}`);
-    //   setTypeSnack("error");
-    //   handleOpenSnack();
-    // }
   };
 
   const handleSubmitUpdate = async (formData) => {
@@ -138,13 +126,11 @@ export const ListUsers = () => {
     }
   };
 
-
   const handleUpdate = (item) => {
     setUpdateData(valuesUpdateUser(item));
     setidUser(item.id);
     handleOpenUpdate();
   }
-
 
   const handledelete = async (item) => {
     setidUser(item.id);
@@ -216,99 +202,89 @@ export const ListUsers = () => {
       options: role.data
     }
   ];
-
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
   
+  if (user.data?.statusCode === 401 || userSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
+
   return (
     <>
-      {loading ?
-        <div className="ContainerCustom">
-          <Loader/>
-        </div>
-      :
-        <div className="ContainerCustom">
-          <button className="topButton" onClick={() => handleOpen()}>
-            <span className="topButtontransition"></span>
-            <span className="topButtongradient"></span>
-            <span className="topButtonlabel">Registrar usuario</span>
-          </button>
-          <SearchElement
-            inputValue={inputValue}
-            setInputValue={setInputValue}
-            selectedOption={selectedOption}
-            setSelectedOption={setSelectedOption}
+      <div className="ContainerCustom">
+        <button className="topButton" onClick={() => handleOpen()}>
+          <span className="topButtontransition"></span>
+          <span className="topButtongradient"></span>
+          <span className="topButtonlabel">Registrar usuario</span>
+        </button>
+        <SearchElement
+          inputValue={inputValue}
+          setInputValue={setInputValue}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+          refetch={userSearch.refetch}
+          options={UserSearchOptions} />
+        {!userSearch.data ?
+          <TableDataCustom
+            data={user.data}
+            isLoading={user.isLoading}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            setPage={setPage}
+            setRowsPerPage={setRowsPerPage}
+            refetch={user.refetch}
+            columns={UserColumns}
+            formatData={formatUser}
+            updateFuntion={handleUpdate}
+            deleteFuntion={handledelete}
+            seeData={SeeData} />
+          :
+          <TableDataCustom
+            data={userSearch.data}
+            isLoading={userSearch.isLoading}
+            page={page}
+            rowsPerPage={rowsPerPage}
+            setPage={setPage}
+            setRowsPerPage={setRowsPerPage}
             refetch={userSearch.refetch}
-            options={UserSearchOptions} />
-          {!userSearch.data ?
-            <TableDataCustom
-              data={user.data}
-              isLoading={user.isLoading}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              setPage={setPage}
-              setRowsPerPage={setRowsPerPage}
-              refetch={user.refetch}
-              columns={UserColumns}
-              formatData={formatUser}
-              updateFuntion={handleUpdate}
-              deleteFuntion={handledelete}
-              seeData={SeeData} />
-            :
-            <TableDataCustom
-              data={userSearch.data}
-              isLoading={userSearch.isLoading}
-              page={page}
-              rowsPerPage={rowsPerPage}
-              setPage={setPage}
-              setRowsPerPage={setRowsPerPage}
-              refetch={userSearch.refetch}
-              columns={UserColumns}
-              formatData={formatUser}
-              updateFuntion={handleUpdate}
-              deleteFuntion={handledelete}
-              seeData={SeeData} />}
-          {ReactDom.createPortal(<>
-            <ModalComponent elemento={<DynamicForm
-              fields={UserFormfields}
-              initialValues={initialValuesCreatedUser}
-              validationSchema={validationSchemaFormUser}
-              onSubmit={handleSubmit}
-              titleButton={"Registrar"} />}
-              open={open}
-              title="Ingrese Usuario"
-              handleClose={handleClose} />
-            <ModalComponent elemento={<DynamicForm
-              fields={UserFormfields}
-              initialValues={updateData}
-              validationSchema={validationSchemaFormUser}
-              onSubmit={handleSubmitUpdate}
-              titleButton={"Actualizar"} />}
-              open={openUpdate}
-              title="Actualizar Usuario"
-              handleClose={handleCloseUpdate} />
-            <ModalComponent elemento={<DeleteElement
-              question={"¿Desea eliminar usuario?"}
-              cancelDelete={handleCloseDelete}
-              handleDelete={handleSubmiteDelete} />}
-              open={openDelete}
-              title="Eliminar usuario"
-              handleClose={handleCloseDelete} />
-            <FeedSnackBar
-              Close={handleCloseSnack}
-              message={Message}
-              open={openSnack}
-              vertical={'bottom'}
-              horizontal={'center'}
-              type={typeSnack} />
-          </>, document.getElementById('modals'))}
-        </div>
-      }
+            columns={UserColumns}
+            formatData={formatUser}
+            updateFuntion={handleUpdate}
+            deleteFuntion={handledelete}
+            seeData={SeeData} />}
+        {ReactDom.createPortal(<>
+          <ModalComponent elemento={<DynamicForm
+            fields={UserFormfields}
+            initialValues={initialValuesCreatedUser}
+            validationSchema={validationSchemaFormUser}
+            onSubmit={handleSubmit}
+            titleButton={"Registrar"} />}
+            open={open}
+            title="Ingrese Usuario"
+            handleClose={handleClose} />
+          <ModalComponent elemento={<DynamicForm
+            fields={UserFormfields}
+            initialValues={updateData}
+            validationSchema={validationSchemaFormUser}
+            onSubmit={handleSubmitUpdate}
+            titleButton={"Actualizar"} />}
+            open={openUpdate}
+            title="Actualizar Usuario"
+            handleClose={handleCloseUpdate} />
+          <ModalComponent elemento={<DeleteElement
+            question={"¿Desea eliminar usuario?"}
+            cancelDelete={handleCloseDelete}
+            handleDelete={handleSubmiteDelete} />}
+            open={openDelete}
+            title="Eliminar usuario"
+            handleClose={handleCloseDelete} />
+          <FeedSnackBar
+            Close={handleCloseSnack}
+            message={Message}
+            open={openSnack}
+            vertical={'bottom'}
+            horizontal={'center'}
+            type={typeSnack} />
+        </>, document.getElementById('modals'))}
+      </div>
     </>
   )
 }

@@ -20,12 +20,13 @@ export const ListUnitMeasure = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const unitmeasureSearch = useQuery({
-    queryKey: ['unitmeasureSearch', { url: "/unitmeasure", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['unitmeasureSearch', { url: "/unitmeasure", page, rowsPerPage, selectedOption, 
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const unitmeasure = useQuery({
-    queryKey: ['unitmeasures', { url: "/unitmeasure", page, rowsPerPage }],
+    queryKey: ['unitmeasures', { url: "/unitmeasure", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 

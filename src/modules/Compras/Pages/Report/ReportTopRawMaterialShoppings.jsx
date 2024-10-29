@@ -33,6 +33,9 @@ export const ReportTopRawMaterialShoppings = () => {
   const [startDateSearch, setStartDateSearch] = useState(null);
   const [endDateSearch, setEndDateSearch] = useState(null);
 
+  const [startdate, setstartdate] = useState(defaultStartDate);
+  const [enddate, setenddate] = useState(defaultEndDate);
+
   const toprawmaterialshopping = useQuery({
     queryKey: ['toprawmaterialshopping', {
       url: "/rawmaterial/toprawmaterialshopping",
@@ -55,9 +58,9 @@ export const ReportTopRawMaterialShoppings = () => {
     enabled: searching
   });
 
-
+  const isUnauthorized = (response) => response?.data?.statusCode === 401;
   useEffect(() => {
-    if (toprawmaterialshoppingSearch.data || toprawmaterialshopping.data) {
+    if (!isUnauthorized(toprawmaterialshoppingSearch) && !isUnauthorized(toprawmaterialshopping)) {  
       const data = searching ? toprawmaterialshoppingSearch.data : toprawmaterialshopping.data;
       if (data) {
         let reportdata = data.map((item) => formatReportTopShopping(item))
@@ -67,11 +70,17 @@ export const ReportTopRawMaterialShoppings = () => {
   }, [toprawmaterialshopping.data, toprawmaterialshoppingSearch.data, searching]);
 
   const handleReport = () => {
-    setSearching(true);
-    toprawmaterialshoppingSearch.refetch();
+    if (startDateSearch && endDateSearch) {
+      setstartdate(FormatSimpleDate(startDateSearch))
+      setenddate(FormatSimpleDate(endDateSearch))
+      setSearching(true);
+      toprawmaterialshoppingSearch.refetch();
+    }
   };
 
   const clearReport = () => {
+    setstartdate(defaultStartDate)
+    setenddate(defaultEndDate);
     setStartDateSearch(null);
     setEndDateSearch(null);
     setSearching(false);
@@ -82,7 +91,9 @@ export const ReportTopRawMaterialShoppings = () => {
   if (!toprawmaterialshopping.data && !searching) {
     return <h1>Sin datos</h1>;
   }
-  
+  if (toprawmaterialshopping.data?.statusCode === 401 || toprawmaterialshopping.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className='ContainerCustomReport'>
       <div className="ContainerSearchReport">
@@ -118,6 +129,14 @@ export const ReportTopRawMaterialShoppings = () => {
         </div>
       </LocalizationProvider>
       <Typography variant="h3" gutterBottom>Materia prima más comprada</Typography>
+      <div className="DateDashboar">
+        <Typography variant="h6" gutterBottom>
+          {`Fecha de inicio: ${startdate}`}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {`Fecha fin: ${enddate}`}
+        </Typography>
+      </div>
       <TableSeeDetails
         columns={ReportTopShoppingColumns}
         data={Data}

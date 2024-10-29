@@ -8,11 +8,45 @@ export const ServerApi = axios.create({
 })
 
 export const fetchPagedData = async ({queryKey}) => {
-  const [_key, {url, page, rowsPerPage, selectedOption, inputValue}] = queryKey;
-  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}`).then((resp)=>resp.json())
+  const [_key, {url, page, rowsPerPage, selectedOption, inputValue, token}] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}`, params).then((resp)=>resp.json())
   if (selectedOption && inputValue) {
-    res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&${selectedOption}=${inputValue}`).then((resp)=>resp.json())
+    res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&${selectedOption}=${inputValue}`, params).then((resp)=>resp.json())
   }
+  return res;
+};
+
+
+export const fetchPagedDataSearch = async ({queryKey}) => {
+  const [_key, {url, page, rowsPerPage, selectedOption, inputValue, token}] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  let res = []
+  if (selectedOption && inputValue) {
+    res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&${selectedOption}=${inputValue}`, params).then((resp)=>resp.json())
+  }
+  return res;
+};
+
+export const fetchPagedDatanotSearch = async ({queryKey}) => {
+  const [_key, {url, page, rowsPerPage, token}] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}`, params).then((resp)=>resp.json())
   return res;
 };
 
@@ -37,5 +71,21 @@ export const fetchReportData = async ({queryKey}) => {
     },
   };
   let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?startOfCurrentMonth=${startOfCurrentMonth}&endOfCurrentMonth=${endOfCurrentMonth}`, params).then((resp)=>resp.json())
+  return res;
+};
+
+export const fetchDatawitmParam = async ({queryKey}) => {
+  const [_key, {url, page, rowsPerPage, queryparam, valuequery, token}] = queryKey;
+  let res = [];
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  if (queryparam && valuequery) {
+    res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&${queryparam}=${valuequery}`, params)
+    .then((resp)=>resp.json())
+  }
   return res;
 };

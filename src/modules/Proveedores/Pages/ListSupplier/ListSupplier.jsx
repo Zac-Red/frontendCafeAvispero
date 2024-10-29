@@ -21,12 +21,13 @@ export const ListSupplier = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   
   const supplierSearch = useQuery({
-    queryKey: ['supplierSearch', {url:"/suppliers", page, rowsPerPage, selectedOption, inputValue}],
+    queryKey: ['supplierSearch', {url:"/suppliers", page, rowsPerPage, selectedOption, 
+    inputValue, token}],
     queryFn: fetchPagedData, enabled: false  
   });
 
   const supplier = useQuery({
-    queryKey: ['supplier', {url:"/suppliers", page, rowsPerPage}],
+    queryKey: ['supplier', {url:"/suppliers", page, rowsPerPage, token}],
     queryFn: fetchPagedData,
   });
   
@@ -111,7 +112,6 @@ export const ListSupplier = () => {
   
 
   const handleUpdate = (item) => {
-    console.log(item);
     setUpdateData(valuesUpdateSuplier(item));
     setidSuplier(item.id);
     handleOpenUpdate();
@@ -128,6 +128,9 @@ export const ListSupplier = () => {
     navigate(`/admin/proveedores/proveedor/${id}`);
   }
 
+  if (supplier.data?.statusCode === 401 || supplierSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className="ContainerCustom">
       <button className="topButton" onClick={() => handleOpen()}>

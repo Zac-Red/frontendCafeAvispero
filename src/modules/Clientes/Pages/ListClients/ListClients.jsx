@@ -1,10 +1,8 @@
 import ReactDom from 'react-dom';
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  ModalComponent, DynamicForm, DeleteElement, FeedSnackBar,
-  SearchElement, TableDataCustom
-} from "../../../../Components"
+import { ModalComponent, DynamicForm, DeleteElement, FeedSnackBar,
+  SearchElement, TableDataCustom } from "../../../../Components"
 import { fetchPagedData } from "../../../../Api/HttpServer";
 import useAuthStore from "../../../../store/AuthStore";
 import { RequestHTTP } from "../../../../httpServer";
@@ -24,12 +22,12 @@ export const ListClients = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const clientSearch = useQuery({
-    queryKey: ['clientSearch', { url: "/customers", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['clientSearch', { url: "/customers", page, rowsPerPage, selectedOption, inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const client = useQuery({
-    queryKey: ['client', { url: "/customers", page, rowsPerPage }],
+    queryKey: ['client', { url: "/customers", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
@@ -130,6 +128,9 @@ export const ListClients = () => {
     navigate(`/admin/clientes/cliente/${id}`);
   }
 
+  if (client.data?.statusCode === 401 || clientSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className="ContainerCustom">
       <button className="topButton" onClick={() => handleOpen()}>

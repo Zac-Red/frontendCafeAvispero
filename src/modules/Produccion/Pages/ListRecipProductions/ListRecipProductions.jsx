@@ -6,8 +6,11 @@ import { fetchPagedData } from '../../../../Api/HttpServer';
 import { RecipProductionSearchOptions } from "../../Helpers/ProductionSearch";
 import { RecipProductionColumns } from "../../Helpers/ProductionColumnsTable";
 import { formatRecipProduction } from "../../utils/FormatProduction";
+import useAuthStore from "../../../../store/AuthStore";
 
 export const ListRecipProductions = () => {
+  const { token } = useAuthStore();
+
   const [selectedOption, setSelectedOption] = useState('');
   const [inputValue, setInputValue] = useState('');
 
@@ -15,12 +18,13 @@ export const ListRecipProductions = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const recipproductionSearch = useQuery({
-    queryKey: ['recipproductionSearch', { url: "/recipproduction", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['recipproductionSearch', { url: "/recipproduction", page, rowsPerPage, selectedOption, 
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const recipproduction = useQuery({
-    queryKey: ['recipproduction', { url: "/recipproduction", page, rowsPerPage }],
+    queryKey: ['recipproduction', { url: "/recipproduction", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
@@ -32,6 +36,10 @@ export const ListRecipProductions = () => {
 
   const SeeData = ({id}) => {
     navigate(`/admin/produccion/receta/${id}`);
+  }
+
+  if (recipproduction.data?.statusCode === 401 || recipproductionSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
   }
 
   return (

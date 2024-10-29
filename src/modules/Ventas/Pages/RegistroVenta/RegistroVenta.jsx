@@ -47,18 +47,19 @@ export const RegistroVenta = () => {
   };
 
   const product = useQuery({
-    queryKey: ['products', { url: "/products", page, rowsPerPage }],
+    queryKey: ['products', { url: "/products", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
 
   const clientSearchForsale = useQuery({
-    queryKey: ['clientSearchForSale', { url: "/customers", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['clientSearchForSale', { url: "/customers", page, rowsPerPage, selectedOption, 
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const clientForSale = useQuery({
-    queryKey: ['clientForSale', { url: "/customers", page, rowsPerPage }],
+    queryKey: ['clientForSale', { url: "/customers", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
@@ -158,11 +159,13 @@ export const RegistroVenta = () => {
   const retorSales = ()=> {
     navigate('/admin/ventas/ventas')
   } 
-
+  
   if (!product.data?.items) {
     return <h3>Sin datos</h3>
   }
-
+  if (!clientForSale.data?.items) {
+    return <h3>Sin datos</h3>
+  }
   return (
     <>
       {(cliente === null) ?

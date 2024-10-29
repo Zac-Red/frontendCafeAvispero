@@ -1,1 +1,1 @@
-export { ListClients } from "./Pages";
+export { ListClients, CardClient } from "./Pages";

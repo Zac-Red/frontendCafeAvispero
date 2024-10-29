@@ -12,10 +12,16 @@ export const CardRawMaterial = () => {
     queryKey: ['rawmaterialSearchTerm', {url:`/rawmaterial/${rawmaterialId}`, token}],
     queryFn: fetchByOneData, 
   });
-  
+  let Detail;
   if (!rawmaterialSearch.data) return <h2>Sin datos</h2>
-  const Detail = FormatRawMaterial(rawmaterialSearch.data);
-  
+  if (rawmaterialSearch.data.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }else{  
+    Detail = FormatRawMaterial(rawmaterialSearch.data);
+  }
+  if (!Detail) {
+    return <h2>Sin datos</h2>
+  }
   return (
     <div className="ContainerCustom">
       <CardPresentElement detail={Detail}/>

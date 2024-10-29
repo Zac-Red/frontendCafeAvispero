@@ -1,6 +1,6 @@
-export async function RequestHTTP(urlBackend, metodo, formData, token,) {
+export async function RequestHTTP(urlBackend, metodo, formData, token) {
     try {
-        const url = `http://localhost:3000${urlBackend}`;
+        const url = `${import.meta.env.VITE_API_URL}${urlBackend}`;
         const params = {
             method: metodo,
             headers: {

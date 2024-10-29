@@ -12,9 +12,16 @@ export const CardClient = () => {
     queryKey: ['clientSearchTerm', {url:`/customers/${clientId}`, token}],
     queryFn: fetchByOneData, 
   });
-
+  let Detail;
   if (!clientSearch.data) return <h2>Sin datos</h2>
-  const Detail = formatCostumerForCard(clientSearch.data)
+  if (clientSearch.data.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  } else {
+    Detail = formatCostumerForCard(clientSearch.data)
+  }
+  if (!Detail) {
+    return <h2>Sin datos</h2>
+  }
   return (
     <div className='ContainerCustom'>
       <Card title={"Datos de cliente"} details={Detail}/>

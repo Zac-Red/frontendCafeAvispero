@@ -1,3 +1,4 @@
+export { Container } from "./Container/Container";
 export { DefaultButton } from "./DefaultButton/DefaultButton";
 export { ButtonDownload } from "./ButtonDownload/ButtonDownload";
 export { Loader } from "./Loader/Loader";

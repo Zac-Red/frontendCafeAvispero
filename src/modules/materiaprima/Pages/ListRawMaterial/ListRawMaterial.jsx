@@ -1,5 +1,5 @@
 import ReactDom from 'react-dom';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from '@tanstack/react-query';
 import useAuthStore from "../../../../store/AuthStore";
@@ -27,32 +27,39 @@ export const ListRawMaterial = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   
   const rawmaterialSearch = useQuery({
-    queryKey: ['rawmaterialsSearch', {url:"/rawmaterial", page, rowsPerPage, selectedOption, inputValue}],
+    queryKey: ['rawmaterialsSearch', {url:"/rawmaterial", page, rowsPerPage, selectedOption, 
+    inputValue, token}],
     queryFn: fetchPagedData, enabled: false  
   });
 
   const rawmaterial = useQuery({
-    queryKey: ['rawmaterials', {url:"/rawmaterial", page, rowsPerPage}],
-    queryFn: fetchPagedData,
+    queryKey: ['rawmaterials', {url:"/rawmaterial", page, rowsPerPage, token}],
+    queryFn: fetchPagedData, enabled: inputValue ? false : true
   });
   
   const unitmeasure = useQuery({
-    queryKey: ['unitMeasure', {url:"/unitmeasure"}],
+    queryKey: ['unitMeasure', {url:"/unitmeasure", token}],
     queryFn: getUnitMeasure
   });
 
   const supplier = useQuery({
-    queryKey: ['supplier', {url:"/suppliers"}],
+    queryKey: ['supplier', {url:"/suppliers", token}],
     queryFn: getSupplier
   });
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setPreview(null);
+    setOpen(false);
+  }
 
   const [openUpdate, setOpenUpdate] = useState(false);
   const handleOpenUpdate = () => setOpenUpdate(true);
-  const handleCloseUpdate = () => setOpenUpdate(false);
+  const handleCloseUpdate = () => {
+    setPreview(null);
+    setOpenUpdate(false);
+  }
 
   const [openDelete, setOpenDelete] = useState(false);
   const handleOpenDelete = () => setOpenDelete(true);
@@ -74,42 +81,61 @@ export const ListRawMaterial = () => {
   const handleSubmit = async(formData) => {
     const { image, ...restData } = formData;
     const nwformData = new FormData();
-    try {
-      nwformData.append('file', image);
-      nwformData.append('upload_preset', import.meta.env.VITE_FILECLOUDINARY);
-      const res = await axios.post(`${import.meta.env.VITE_URLCLOUDINARY}`, nwformData);
-      const newproduct = { ...restData, url: res.data.secure_url, }
-      if (res.data.secure_url) {
-        const response = await RequestHTTP("/rawmaterial","POST",  newproduct, token);
-        if (response.sucess) {
-          handleClose();
-          setMessage("Registro ingresado con éxito");
-          setTypeSnack("success");
-          handleOpenSnack();
-          if (inputValue) {
-            rawmaterialSearch.refetch();
+    if (image) {
+      try {
+        nwformData.append('file', image);
+        nwformData.append('upload_preset', import.meta.env.VITE_FILECLOUDINARY);
+        const res = await axios.post(`${import.meta.env.VITE_URLCLOUDINARY}`, nwformData);
+        const newproduct = { ...restData, url: res.data.secure_url, }
+        if (res.data.secure_url) {
+          const response = await RequestHTTP("/rawmaterial","POST",  newproduct, token);
+          if (response.sucess) {
+            handleClose();
+            setMessage("Registro ingresado con éxito");
+            setTypeSnack("success");
+            handleOpenSnack();
+            if (inputValue) {
+              rawmaterialSearch.refetch();
+            }
+            rawmaterial.refetch();
+          }else{
+            setMessage(`${response.mesague.message}`);
+            setTypeSnack("error");
+            handleOpenSnack();
           }
-          rawmaterial.refetch();
         }else{
           setMessage(`${response.mesague.message}`);
           setTypeSnack("error");
           handleOpenSnack();
         }
+      } catch (error) {
+        setMessage(`${error}`);
+        setTypeSnack("error");
+        handleOpenSnack();
+      }
+    }else{
+      const response = await RequestHTTP("/rawmaterial","POST",  formData, token);
+      if (response.sucess) {
+        handleClose();
+        setMessage("Registro ingresado con éxito");
+        setTypeSnack("success");
+        handleOpenSnack();
+        if (inputValue) {
+          rawmaterialSearch.refetch();
+        }
+        rawmaterial.refetch();
       }else{
         setMessage(`${response.mesague.message}`);
         setTypeSnack("error");
         handleOpenSnack();
       }
-    } catch (error) {
-      setMessage(`${error}`);
-      setTypeSnack("error");
-      handleOpenSnack();
     }
+    setPreview(null);
   };
   
   const handleSubmitUpdate = async (formData) => {
     const { image, ...restData } = formData;
-    if (typeof image === 'string') {
+    if (typeof image === 'string' || !image) {
       const response = await RequestHTTP(`/rawmaterial/${idProduct}`, "PATCH", formData, token);
       if (response.sucess) {
         handleCloseUpdate();
@@ -160,6 +186,7 @@ export const ListRawMaterial = () => {
       setTypeSnack("error");
       handleOpenSnack();
     }
+    setPreview(null);
   };
   
   const handleSubmiteDelete = async () => {
@@ -234,6 +261,15 @@ export const ListRawMaterial = () => {
     },
   ];
 
+  useEffect(() => {
+    if (inputValue) {
+      rawmaterialSearch.refetch();
+    }
+  }, [page, rowsPerPage]);
+
+  if (rawmaterial.data?.statusCode === 401 || rawmaterialSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className="ContainerCustom">
       <button className="topButton" onClick={() => handleOpen()}>
@@ -287,7 +323,7 @@ export const ListRawMaterial = () => {
           titleButton={"Registrar"}
           StylesForm="FormProduct" />}
           open={open}
-          title="Ingrese Producto"
+          title="Registre materia prima"
           handleClose={handleClose} />
         <ModalComponent elemento={<DynamicFormImg
           setPreview={setPreview}

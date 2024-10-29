@@ -9,6 +9,7 @@ import { UserSearchReportRole } from "../../Helpers/UserSearch";
 import { generarPDF } from "../../../Reports/utils/GeneretReport";
 import { GetLogoReport } from "../../../../Hooks";
 import { ButtonDownload } from "../../../../Components/ButtonDownload/ButtonDownload";
+import useAuthStore from "../../../../store/AuthStore";
 
 const columns = [
   {label: "Nombre", value: "firstname"},
@@ -20,15 +21,24 @@ const columns = [
 ];
 
 const fetchPagedData = async ({queryKey}) => {
-  const [_key, {url, page, rowsPerPage, selectedOption, inputValue}] = queryKey;
-  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}`).then((resp)=>resp.json())
+  const [_key, {url, page, rowsPerPage, selectedOption, inputValue, token}] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  let res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}`, params).then((resp)=>resp.json())
   if (selectedOption && inputValue) {
-    res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&${selectedOption}=${inputValue}`).then((resp)=>resp.json())
+    res = await fetch(`${import.meta.env.VITE_API_URL}${url}?page=${page}&limit=${rowsPerPage}&${selectedOption}=${inputValue}`, params)
+    .then((resp)=>resp.json())
   }
   return res;
 };
 
 export const ReportUsersRoles = () => {
+  const { token } = useAuthStore();
+
   const [selectedOption, setSelectedOption] = useState('');
   const [inputValue, setInputValue] = useState('');
 
@@ -36,12 +46,16 @@ export const ReportUsersRoles = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   
   const userSearch = useQuery({
-    queryKey: ['userSearch', {url:"/auth", page, rowsPerPage, selectedOption, inputValue}],
+    queryKey: ['userSearch', {url:"/auth", page, rowsPerPage, selectedOption, 
+    inputValue, token}],
     queryFn: fetchPagedData, enabled: false  
   });
 
   const { logoBase64 } = GetLogoReport();
 
+  if (userSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className="ContainerCustom">
       <Typography variant="h3" gutterBottom>Usuarios por rol</Typography>

@@ -1,1 +1,1 @@
-export { ListSupplier } from "./Pages/ListSupplier/ListSupplier";
+export { ListSupplier, CardSupplier } from "./Pages";

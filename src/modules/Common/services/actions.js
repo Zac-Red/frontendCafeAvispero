@@ -1,9 +1,15 @@
-export const getUnitMeasure = async({queryKey}) =>{
-  const [_key, {url}] = queryKey;
-  const res = await fetch(`${import.meta.env.VITE_API_URL}${url}`).then((resp)=>resp.json())
+export const getUnitMeasure = async ({ queryKey }) => {
+  const [_key, { url, token }] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  const res = await fetch(`${import.meta.env.VITE_API_URL}${url}`, params).then((resp) => resp.json())
   let unitmeasure = [];
   if (res.items) {
-    unitmeasure = res.items.map((item)=>(
+    unitmeasure = res.items.map((item) => (
       {
         value: item.id,
         label: item.name
@@ -13,19 +19,31 @@ export const getUnitMeasure = async({queryKey}) =>{
   return unitmeasure;
 }
 
-export const getUnitMeasureObject = async({queryKey}) =>{
-  const [_key, {url}] = queryKey;
-  const res = await fetch(`${import.meta.env.VITE_API_URL}${url}`).then((resp)=>resp.json())
+export const getUnitMeasureObject = async ({ queryKey }) => {
+  const [_key, { url, token }] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  const res = await fetch(`${import.meta.env.VITE_API_URL}${url}`, params).then((resp) => resp.json())
   return res;
 }
 
 
-export const getSupplier = async({queryKey}) =>{
-  const [_key, {url}] = queryKey;
-  const res = await fetch(`${import.meta.env.VITE_API_URL}${url}`).then((resp)=>resp.json())
+export const getSupplier = async ({ queryKey }) => {
+  const [_key, { url, token }] = queryKey;
+  const params = {
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+  };
+  const res = await fetch(`${import.meta.env.VITE_API_URL}${url}`, params).then((resp) => resp.json())
   let supplier = [];
   if (res.items) {
-    supplier = res.items.map((item)=>(
+    supplier = res.items.map((item) => (
       {
         value: item.id,
         label: item.personeria

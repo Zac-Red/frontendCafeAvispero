@@ -2,30 +2,25 @@ import { useEffect } from "react"
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Inicio } from "./modules/Inicio/Inicio";
 import { LandingPage } from "./LandingPage/LandingPage"
-import { Container } from "./Components/Container/Container"
+import { Container } from "./Components"
+import { ListClients, CardClient } from "./modules/Clientes";
+import { ListSupplier, CardSupplier } from "./modules/Proveedores";
+import { ListUnitMeasure, Error404, InventoryMoves } from "./modules/Common";
+import { DashBoardRawMaterial, KardexRawMaterial, ListRawMaterial, CardRawMaterial, RefineRawMaterial } from "./modules/materiaprima";
 import { CardUser, ListUsers, Login, ReportUsersRoles, ReportsUsersActive } from "./modules/Auth/Pages";
 import { DashboardVentas, RegistroVenta, Ventas, ReporteVenta, CardVentas } from "./modules/Ventas/Pages";
-import { ListClients } from "./modules/Clientes";
-import { ListUnitMeasure, Error404, InventoryMoves } from "./modules/Common";
-import { ListSupplier } from "./modules/Proveedores";
+import { DashBoardProduct, ListProducts, KardexProduct, ReportTopSalesProduct,CardProduct } from "./modules/Productos";
+import { RegisterShoppings, DashBoardCompras, Compras, CardCompras, 
+  ReportTopRawMaterialShoppings } from "./modules/Compras/Pages";
+import { DashboardProductions, ListProductions, ListRecipProductions, RecipProductCard, 
+  RegisterProductions, RegisterRecipProductions, ReportTopPorductsProductions} from "./modules/Produccion";
 import useAuthStore from "./store/AuthStore";
-import AuthGuard from "./Guards/AuthGuard"
-import { DashBoardProduct, ListProducts, KardexProduct } from "./modules/Productos";
+import { PublicGuard, AuthGuard } from "./Guards";
 import { ventasURLs, comprasURLs, usuariosURLs, clientesURLs, 
   proveedoresURLs, productosURLs, MainURLs, materiaprimaURLs,Produccion} from "./router";
-import { DashBoardRawMaterial, KardexRawMaterial, ListRawMaterial } from "./modules/materiaprima";
-import { PublicGuard } from "./Guards/PublicGuard";
-import { RegisterShoppings, DashBoardCompras, Compras, CardCompras, ReportTopRawMaterialShoppings } from "./modules/Compras/Pages";
-import { CardClient } from "./modules/Clientes/Pages/CardClient/CardClient";
-import { CardSupplier } from "./modules/Proveedores/Pages/CardSupplier/CardSupplier";
-import { CardProduct } from "./modules/Productos/Pages/CardProduct/CardProduct";
-import { CardRawMaterial } from "./modules/materiaprima/Pages/CardRawMaterial/CardRawMaterial";
-import { DashboardProductions, ListProductions, ListRecipProductions, RecipProductCard, 
-  RegisterProductions, RegisterRecipProductions, 
-  ReportTopPorductsProductions} from "./modules/Produccion";
 import './index.css';
 import './Styles/MainProcess.css';
-import { ReportTopSalesProduct } from "./modules/Productos/Pages";
+import '@fontsource/roboto/500.css';
 
 function App() {
   const { isLoggedIn, checkAuth } = useAuthStore();
@@ -103,11 +98,13 @@ function App() {
           
           <Route path="materiaprima/*" element={<Container urls={materiaprimaURLs}/>}>
             <Route index element={<Navigate to="dashboard"/>}/>
-            <Route path="dashboard" element={<DashBoardRawMaterial/>}/>
+            <Route path="dashboard" element={<DashBoardCompras/>}/>
+            {/* <Route path="dashboard" element={<DashBoardRawMaterial/>}/> */}
             <Route path="materiasprimas" element={<ListRawMaterial/>}/>
             <Route path="unidades" element={<ListUnitMeasure/>}/>
             <Route path="tipos-movimientos" element={<InventoryMoves/>}/>
             <Route path="reporte" element={<ReportTopRawMaterialShoppings/>}/>
+            <Route path="refinar-materiaprima" element={<RefineRawMaterial/>}/>
             <Route path="kardex" element={<KardexRawMaterial/>}/>
             <Route path="materiaprima/:rawmaterialId" element={<CardRawMaterial/>}/>
             <Route path="*" element={<Error404/>}/>

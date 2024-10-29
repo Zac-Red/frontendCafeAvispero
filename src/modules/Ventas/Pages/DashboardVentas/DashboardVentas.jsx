@@ -5,6 +5,7 @@ import useAuthStore from "../../../../store/AuthStore";
 import { fetchReportData } from "../../../../Api/HttpServer";
 import { formatPieKPIVentas } from "../../utils/FormatVentas";
 
+import Typography from '@mui/material/Typography';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { TextField, Box } from '@mui/material';
@@ -28,6 +29,9 @@ export const DashboardVentas = () => {
 
   const [startDateSearch, setStartDateSearch] = useState(null);
   const [endDateSearch, setEndDateSearch] = useState(null);
+
+  const [startdate, setstartdate] = useState(defaultStartDate);
+  const [enddate, setenddate] = useState(defaultEndDate);
 
   const formatChartData = (data) => {
     const dataKpi = data.map(item => formatPieKPIVentas(item));
@@ -58,20 +62,30 @@ export const DashboardVentas = () => {
     enabled: searching
   });
 
+  const isUnauthorized = (response) => response?.data?.statusCode === 401;
+
   useEffect(() => {
-    const data = searching ? topcustomersSearch.data : topcustomers.data;
-    if (data) {
-      const formattedData = formatChartData(data);
-      setChartData(formattedData);
+    if (!isUnauthorized(topcustomersSearch) && !isUnauthorized(topcustomers)) {     
+      const data = searching ? topcustomersSearch.data : topcustomers.data;
+      if (data) {
+        const formattedData = formatChartData(data);
+        setChartData(formattedData);
+      }
     }
   }, [topcustomers.data, topcustomersSearch.data, searching]);
 
   const handleReport = () => {
-    setSearching(true);
-    topcustomersSearch.refetch();
+    if (startDateSearch && endDateSearch) {
+      setstartdate(FormatSimpleDate(startDateSearch))
+      setenddate(FormatSimpleDate(endDateSearch))
+      setSearching(true);
+      topcustomersSearch.refetch();
+    }
   };
 
   const clearReport = () => {
+    setstartdate(defaultStartDate)
+    setenddate(defaultEndDate);
     setStartDateSearch(null);
     setEndDateSearch(null);
     setSearching(false);
@@ -81,11 +95,24 @@ export const DashboardVentas = () => {
     return <h1>Sin datos</h1>;
   }
 
+  if (topcustomers.data?.statusCode === 401 || topcustomersSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className='ContainerDashBoard'>
-      <button onClick={handleReport}>Buscar</button>
-      <button onClick={clearReport}>Limpiar</button>
-
+      <div className="containerbtndashboard">
+        <button onClick={handleReport}>Buscar</button>
+        <button onClick={clearReport}>Limpiar</button>
+      </div>
+      <Typography variant="h3" gutterBottom>Clientes con más compras</Typography>
+      <div className="DateDashboar">
+        <Typography variant="h6" gutterBottom>
+          {`Fecha de inicio: ${startdate}`}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {`Fecha fin: ${enddate}`}
+        </Typography>
+      </div>
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={es}>
         <div className='containerDatepikerdashboar'>
           <DatePicker
@@ -109,6 +136,8 @@ export const DashboardVentas = () => {
           series={[
             {
               data: chartData.dataKpi,
+              highlightScope: { fade: 'global', highlight: 'item' },
+              faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
             },
           ]}
           width={700}

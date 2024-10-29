@@ -1,7 +1,7 @@
 import LeaderboardIcon from '@mui/icons-material/Leaderboard';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import HandymanIcon from '@mui/icons-material/Handyman';
 import SignalCellularAltIcon from '@mui/icons-material/SignalCellularAlt';
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 export const ventasURLs = [
   {
@@ -17,7 +17,7 @@ export const ventasURLs = [
   {
     url: "/admin/ventas/ventas",
     name: "Ventas",
-    icon: <HandymanIcon/>
+    icon: <MonetizationOnIcon/>
   },
   {
     url: "/admin/ventas/reportes",

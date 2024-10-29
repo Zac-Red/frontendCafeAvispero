@@ -12,15 +12,20 @@ export const formatShopping = (item) => {
 }
 
 export const formatShoppingForCard = (item) => {
-  const newCreatedAt = FormatDate(item.shopping.createdAt);
-  return[
-    {label: "ID", value: item.shopping.id},
-    {label: "Documento comercial", value: item.shopping.commercialdocument},
-    {label: "Fecha del documento comercial", value: item.shopping.datecommercialdocument},
-    {label: "Proveedor", value: item.shopping.supplierId.namecontact},
-    {label: "Total de la compra:", value: item.shopping.total},
-    {label: "Fecha de la compra:", value: newCreatedAt},
-  ]
+  if (item) {
+    const newCreatedAt = FormatDate(item.shopping?.createdAt);
+    let details = [
+      {label: "ID", value: item.shopping.id},
+      {label: "Documento comercial", value: item.shopping.commercialdocument},
+      {label: "Fecha del documento comercial", value: item.shopping.datecommercialdocument},
+      {label: "Proveedor", value: item.shopping.supplierId.namecontact},
+      {label: "Total de la compra:", value: item.shopping.total},
+      {label: "Fecha de la compra:", value: newCreatedAt},
+    ]
+    return details
+  } else {
+    return []
+  }
 }
 
 export const formatDetailShopping = (item) =>{

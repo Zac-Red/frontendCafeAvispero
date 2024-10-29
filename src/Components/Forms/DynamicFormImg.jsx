@@ -4,8 +4,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import FormStyles from './Forms.module.css';
 
-export const DynamicFormImg = ({ initialValues, validationSchema, onSubmit, fields, 
-  titleButton, StylesForm, StylesButton, preview, setPreview}) => {
+export const DynamicFormImg = ({ initialValues, validationSchema, onSubmit, fields,
+  titleButton, StylesForm, StylesButton, preview, setPreview }) => {
 
   const handleImageChange = (e, setFieldValue) => {
     const file = e.currentTarget.files[0];
@@ -51,17 +51,18 @@ export const DynamicFormImg = ({ initialValues, validationSchema, onSubmit, fiel
             ))}
           </TextField>
         ))}
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={(event) => {handleImageChange(event, formik.setFieldValue)}}/>
-          {formik.errors.image && formik.touched.image && (
-            <div>{formik.errors.image}</div>
-          )}
-          <div>
-            {preview && <img src={preview} alt="Previsualización" style={{ width: '200px' }} />}
-          </div>
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={(event) => { handleImageChange(event, formik.setFieldValue) }} />
+        {formik.errors.image && formik.touched.image && (
+          <div>{formik.errors.image}</div>
+        )}
+        {preview &&
+          <div className="image-preview-form">
+            <img src={preview} alt="Previsualización" />
+          </div>}
         <button type="submit" className={FormStyles[StylesButton]}>{titleButton}</button>
       </form>
     </div>

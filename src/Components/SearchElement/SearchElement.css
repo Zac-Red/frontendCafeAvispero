@@ -1,0 +1,18 @@
+.containersearch{
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.inputsearch {
+  color: black;
+  border: 2px solid #e5b67c;
+  border-radius: 10px;
+  padding: 10px 25px;
+  background: #ccc;
+  max-width: 190px;
+}
+
+.inputsearch:focus {
+  box-shadow: 2px 2px 15px #e3b28a inset;
+}

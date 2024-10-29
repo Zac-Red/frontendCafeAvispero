@@ -33,6 +33,8 @@ export const ReporteVenta = () => {
   const [startDateSearch, setStartDateSearch] = useState(null);
   const [endDateSearch, setEndDateSearch] = useState(null);
 
+  const [startdate, setstartdate] = useState(defaultStartDate);
+  const [enddate, setenddate] = useState(defaultEndDate);
 
   const topcustomers = useQuery({
     queryKey: ['topcustomers', {
@@ -56,8 +58,10 @@ export const ReporteVenta = () => {
     enabled: searching
   });
 
+  const isUnauthorized = (response) => response?.data?.statusCode === 401;
+
   useEffect(() => {
-    if (topcustomersSearch.data || topcustomers.data) {
+    if (!isUnauthorized(topcustomersSearch) && !isUnauthorized(topcustomers)) { 
       const data = searching ? topcustomersSearch.data: topcustomers.data;
       if (data) {
         let reportdata = data.map((item)=> formatReportTopCustomers(item))
@@ -67,11 +71,17 @@ export const ReporteVenta = () => {
   }, [topcustomers.data, topcustomersSearch.data, searching]);
 
   const handleReport = () => {
-    setSearching(true);
-    topcustomersSearch.refetch();
+    if (startDateSearch && endDateSearch) {
+      setstartdate(FormatSimpleDate(startDateSearch))
+      setenddate(FormatSimpleDate(endDateSearch))
+      setSearching(true);
+      topcustomersSearch.refetch();
+    }
   };
 
   const clearReport = () => {
+    setstartdate(defaultStartDate)
+    setenddate(defaultEndDate);
     setStartDateSearch(null);
     setEndDateSearch(null);
     setSearching(false);
@@ -82,6 +92,11 @@ export const ReporteVenta = () => {
   if (!topcustomers.data && !searching) {
     return <h1>Sin datos</h1>;
   }
+
+  if (topcustomers.data?.statusCode === 401 || topcustomersSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
+
   return (
     <div className='ContainerCustomReport'>
       <div className="ContainerSearchReport">
@@ -117,6 +132,14 @@ export const ReporteVenta = () => {
         </div>
       </LocalizationProvider>
       <Typography variant="h3" gutterBottom>Clientes con más compras</Typography>
+      <div className="DateDashboar">
+        <Typography variant="h6" gutterBottom>
+          {`Fecha de inicio: ${startdate}`}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {`Fecha fin: ${enddate}`}
+        </Typography>
+      </div>
       <TableSeeDetails
         columns={ReportTopCustomers}
         data={Data} 

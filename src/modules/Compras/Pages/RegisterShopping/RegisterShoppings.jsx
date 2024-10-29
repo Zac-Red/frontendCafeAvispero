@@ -2,7 +2,7 @@ import ReactDom from 'react-dom';
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from "react-router-dom";
-import { fetchPagedData } from '../../../../Api/HttpServer';
+import { fetchDatawitmParam, fetchPagedData } from '../../../../Api/HttpServer';
 import useAuthStore from '../../../../store/AuthStore';
 import { DynamicForm, FeedSnackBar, ModalComponent, SearchElement, TableSetData } from '../../../../Components';
 import { ContainerElements } from '../../../../Components/ContainerElments/ContainerElements';
@@ -53,22 +53,22 @@ export const RegisterShoppings = () => {
     setOpenSnack(false)
   };
 
-  const rawmaterial = useQuery({
-    queryKey: ['rawmaterial', { url: "/rawmaterial", page, rowsPerPage }],
-    queryFn: fetchPagedData,
-  });
-
-
   const suppliersSearchForShopping = useQuery({
-    queryKey: ['clientSearchForShopping', { url: "/suppliers", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['suppliersSearchForShopping', { url: "/suppliers", page, rowsPerPage, selectedOption, 
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const suppliersForShopping = useQuery({
-    queryKey: ['suppliersForShopping', { url: "/suppliers", page, rowsPerPage }],
+    queryKey: ['suppliersForShopping', { url: "/suppliers", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
+  const rawmaterial = useQuery({
+    queryKey: ['rawmaterial', { url: "/rawmaterial", page, rowsPerPage, queryparam: "supplierId",  
+    valuequery: supplier?.id, token}],
+    queryFn: fetchDatawitmParam,
+  });
 
   const AgredProduct = (item) => {
     handleOpen()
@@ -170,10 +170,10 @@ export const RegisterShoppings = () => {
 
   const retorShopings = ()=> {
     navigate('/admin/compras/compras')
-  } 
-
-  if (!rawmaterial.data?.items) {
-    return <h3>Sin datos</h3>
+  }
+  
+  if (suppliersForShopping.data?.statusCode === 401 || suppliersSearchForShopping.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
   }
 
   return (
@@ -214,7 +214,7 @@ export const RegisterShoppings = () => {
         :
         <div className="containerProcess">
           <ContainerElements
-            data={rawmaterial.data.items}
+            data={rawmaterial.data?.items}
             propertys={propert}
             actionBtn={AgredProduct}/>
           <Cart

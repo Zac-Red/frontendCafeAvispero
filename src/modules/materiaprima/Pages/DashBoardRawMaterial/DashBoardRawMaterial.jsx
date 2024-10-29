@@ -5,6 +5,7 @@ import useAuthStore from "../../../../store/AuthStore";
 import { fetchReportData } from "../../../../Api/HttpServer";
 import { formatPieKPICompras } from "../../../Compras/utils/FormatCompras";
 
+import Typography from '@mui/material/Typography';
 import { PieChart } from '@mui/x-charts/PieChart';
 import { BarChart } from '@mui/x-charts/BarChart';
 import { TextField, Box } from '@mui/material';
@@ -29,6 +30,9 @@ export const DashBoardRawMaterial = () => {
   const [startDateSearch, setStartDateSearch] = useState(null);
   const [endDateSearch, setEndDateSearch] = useState(null);
 
+  const [startdate, setstartdate] = useState(defaultStartDate);
+  const [enddate, setenddate] = useState(defaultEndDate);
+  
   const formatChartData = (data) => {
     const dataKpi = data.map(item => formatPieKPICompras(item));
     const axis = data.map(item => item.rawmaterial_name);
@@ -39,9 +43,9 @@ export const DashBoardRawMaterial = () => {
   const toprawmaterialshopping = useQuery({
     queryKey: ['toprawmaterialshopping', {
       url: "/rawmaterial/toprawmaterialshopping",
-      token,
       startOfCurrentMonth: defaultStartDate,
-      endOfCurrentMonth: defaultEndDate
+      endOfCurrentMonth: defaultEndDate,
+      token,
     }],
     queryFn: fetchReportData,
     enabled: !searching
@@ -50,28 +54,38 @@ export const DashBoardRawMaterial = () => {
   const toprawmaterialshoppingSearch = useQuery({
     queryKey: ['toprawmaterialshoppingSearch', {
       url: "/rawmaterial/toprawmaterialshopping",
-      token,
       startOfCurrentMonth: startDateSearch ? FormatSimpleDate(startDateSearch) : defaultStartDate,
-      endOfCurrentMonth: endDateSearch ? FormatSimpleDate(endDateSearch) : defaultEndDate
+      endOfCurrentMonth: endDateSearch ? FormatSimpleDate(endDateSearch) : defaultEndDate,
+      token,
     }],
     queryFn: fetchReportData,
     enabled: searching
   });
 
+  const isUnauthorized = (response) => response?.data?.statusCode === 401;
+
   useEffect(() => {
-    const data = searching ? toprawmaterialshoppingSearch.data : toprawmaterialshopping.data;
-    if (data) {
-      const formattedData = formatChartData(data);
-      setChartData(formattedData);
+    if (!isUnauthorized(toprawmaterialshoppingSearch) && !isUnauthorized(toprawmaterialshopping)) {  
+      const data = searching ? toprawmaterialshoppingSearch.data : toprawmaterialshopping.data;
+      if (data) {
+        const formattedData = formatChartData(data);
+        setChartData(formattedData);
+      }
     }
   }, [toprawmaterialshopping.data, toprawmaterialshoppingSearch.data, searching]);
 
   const handleReport = () => {
-    setSearching(true);
-    toprawmaterialshoppingSearch.refetch();
+    if (startDateSearch && endDateSearch) {
+      setstartdate(FormatSimpleDate(startDateSearch))
+      setenddate(FormatSimpleDate(endDateSearch))
+      setSearching(true);
+      toprawmaterialshoppingSearch.refetch();
+    }
   };
 
   const clearReport = () => {
+    setstartdate(defaultStartDate)
+    setenddate(defaultEndDate);
     setStartDateSearch(null);
     setEndDateSearch(null);
     setSearching(false);
@@ -80,12 +94,15 @@ export const DashBoardRawMaterial = () => {
   if (!toprawmaterialshopping.data && !searching) {
     return <h1>Sin datos</h1>;
   }
-
+  if (toprawmaterialshopping.data.statusCode === 401 || toprawmaterialshoppingSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className='ContainerDashBoard'>
-      <button onClick={handleReport}>Buscar</button>
-      <button onClick={clearReport}>Limpiar</button>
-
+      <div className="containerbtndashboard">
+        <button onClick={handleReport}>Buscar</button>
+        <button onClick={clearReport}>Limpiar</button>
+      </div>
       <LocalizationProvider dateAdapter={AdapterDateFns} locale={es}>
         <div className='containerDatepikerdashboar'>
           <DatePicker
@@ -103,12 +120,22 @@ export const DashBoardRawMaterial = () => {
           />
         </div>
       </LocalizationProvider>
-
+      <Typography variant="h3" gutterBottom>Materia prima más comprada</Typography>
+      <div className="DateDashboar">
+        <Typography variant="h6" gutterBottom>
+          {`Fecha de inicio: ${startdate}`}
+        </Typography>
+        <Typography variant="h6" gutterBottom>
+          {`Fecha fin: ${enddate}`}
+        </Typography>
+      </div>
       <div className='containerChart'>
         <PieChart
           series={[
             {
               data: chartData.dataKpi,
+              highlightScope: { fade: 'global', highlight: 'item' },
+              faded: { innerRadius: 30, additionalRadius: -30, color: 'gray' },
             },
           ]}
           width={700}

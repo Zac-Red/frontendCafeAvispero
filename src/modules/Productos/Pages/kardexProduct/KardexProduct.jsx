@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "../../../../store/AuthStore";
 import { useQuery } from '@tanstack/react-query';
-import { fetchPagedData } from "../../../../Api/HttpServer";
+import Typography from '@mui/material/Typography';
+import { fetchPagedData, fetchPagedDataSearch, fetchPagedDatanotSearch } from "../../../../Api/HttpServer";
 import { SearchElement, TableDataCustom } from "../../../../Components";
 import { KardexProductSearchOptions } from "../../Helpers/ProductSearch";
 import { formatKardexProduct } from "../../utils/FormatProduct";
@@ -17,18 +18,29 @@ export const KardexProduct = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   
   const kardexproductSearch = useQuery({
-    queryKey: ['kardexproductSearch', {url:"/inventoryproduct", page, rowsPerPage, selectedOption, inputValue}],
-    queryFn: fetchPagedData, enabled: false  
+    queryKey: ['kardexproductSearch', {url:"/inventoryproduct", page, rowsPerPage, selectedOption, 
+    inputValue, token}],
+    queryFn: fetchPagedDataSearch, enabled: false
   });
 
   const kardexproduct = useQuery({
-    queryKey: ['kardexproduct', {url:"/inventoryproduct", page, rowsPerPage}],
-    queryFn: fetchPagedData,
+    queryKey: ['kardexproduct', {url:"/inventoryproduct", page, rowsPerPage, token}],
+    queryFn: fetchPagedDatanotSearch, enabled: inputValue ? false : true
   });
-  
-  
+
+  useEffect(() => {
+    if (inputValue) {
+      kardexproductSearch.refetch();
+    }
+  }, [page, rowsPerPage]);
+
+  if (kardexproduct.data?.statusCode === 401 || kardexproductSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
+
   return (
     <div className="ContainerCustom">
+      <Typography variant="h3" gutterBottom>Kardex de producto</Typography>
       <SearchElement
         inputValue={inputValue}
         setInputValue={setInputValue}
@@ -36,7 +48,7 @@ export const KardexProduct = () => {
         setSelectedOption={setSelectedOption}
         refetch={kardexproductSearch.refetch}
         options={KardexProductSearchOptions} />
-      {!kardexproductSearch.data ?
+      {!kardexproductSearch.data?.items ?
         <TableDataCustom
           data={kardexproduct.data}
           isLoading={kardexproduct.isLoading}

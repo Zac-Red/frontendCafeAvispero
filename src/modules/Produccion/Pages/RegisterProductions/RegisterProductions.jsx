@@ -43,12 +43,13 @@ export const RegisterProductions = () => {
   };
 
   const recipproductionSearch = useQuery({
-    queryKey: ['recipproductionSearch', { url: "/recipproduction", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['recipproductionSearch', { url: "/recipproduction", page, rowsPerPage, selectedOption,
+    inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const recipproduction = useQuery({
-    queryKey: ['recipproduction', { url: "/recipproduction", page, rowsPerPage }],
+    queryKey: ['recipproduction', { url: "/recipproduction", page, rowsPerPage, token}],
     queryFn: fetchPagedData,
   });
 
@@ -78,6 +79,9 @@ export const RegisterProductions = () => {
     navigate('/admin/produccion/producciones')  
   }
 
+  if (recipproduction.data?.statusCode === 401 || recipproductionSearch.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
   return (
     <div className="ContainerCustom">
       <Typography variant="h4">Seleccione Receta</Typography>

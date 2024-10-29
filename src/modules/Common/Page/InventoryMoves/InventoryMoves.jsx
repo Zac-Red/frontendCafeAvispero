@@ -19,12 +19,13 @@ export const InventoryMoves = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const invetorymoveSearch = useQuery({
-    queryKey: ['invetorymoveSearch', {url:"/inventorymoves", page, rowsPerPage, selectedOption, inputValue}],
+    queryKey: ['invetorymoveSearch', {url:"/inventorymoves", page, rowsPerPage, 
+    selectedOption, inputValue, token}],
     queryFn: fetchPagedData, enabled: false  
   });
 
   const invetorymove = useQuery({
-    queryKey: ['invetorymoves', {url:"/inventorymoves", page, rowsPerPage}],
+    queryKey: ['invetorymoves', {url:"/inventorymoves", page, rowsPerPage, token}],
     queryFn: fetchPagedData,
   });
 

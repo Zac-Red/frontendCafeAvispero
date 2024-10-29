@@ -57,24 +57,25 @@ export const RegisterRecipProductions = () => {
   };
 
   const rawmaterials = useQuery({
-    queryKey: ['products', { url: "/rawmaterial", page, rowsPerPage }],
+    queryKey: ['rawmaterials', { url: "/rawmaterial", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
   
   const productsSearchForRecip = useQuery({
-    queryKey: ['productsSearchForRecip', { url: "/products", page, rowsPerPage, selectedOption, inputValue }],
+    queryKey: ['productsSearchForRecip', { url: "/products", page, rowsPerPage, 
+    selectedOption, inputValue, token }],
     queryFn: fetchPagedData, enabled: false
   });
 
   const productsForRecip = useQuery({
-    queryKey: ['productsForRecip', { url: "/products", page, rowsPerPage }],
+    queryKey: ['productsForRecip', { url: "/products", page, rowsPerPage, token }],
     queryFn: fetchPagedData,
   });
 
 
   const unitmeasure = useQuery({
-    queryKey: ['unitMeasure', {url:"/unitmeasure"}],
+    queryKey: ['unitMeasure', {url:"/unitmeasure", token}],
     queryFn: getUnitMeasureObject
   });
 
@@ -149,16 +150,24 @@ export const RegisterRecipProductions = () => {
     navigate('/admin/produccion/recetas')  
   }
   
-  
+  if (productsForRecip.data?.statusCode === 401 || 
+      productsSearchForRecip.data?.statusCode === 401 ||
+      rawmaterials.data?.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  }
+
   if (!productsForRecip.data?.items) {
     return <h3>Sin datos</h3>
   }
   
-  
   if (!unitmeasure.data?.items) {
-    return <h1>Load</h1>
+    return <h1>Sin datos</h1>
   }
   
+  if (!rawmaterials.data?.items) {
+    return <h1>Sin datos</h1>
+  }
+
   const CartDetailProductionFormfields = [
     {
       name: "amount",

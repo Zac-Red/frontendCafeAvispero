@@ -13,9 +13,16 @@ export const CardSupplier = () => {
     queryKey: ['clientSearchTerm', {url:`/suppliers/${supplierId}`, token}],
     queryFn: fetchByOneData, 
   });
-
+  let Detail;
   if (!supplierSearch.data) return <h2>Sin datos</h2>
-  const Detail = formatSupplierForCard(supplierSearch.data)
+  if (supplierSearch.data.statusCode === 401) {
+    return <h2>Acceso denegado</h2>
+  } else {
+    Detail = formatSupplierForCard(supplierSearch.data)
+  } 
+  if (!Detail) {
+    return <h2>Sin datos</h2>
+  }
   return (
     <div className='ContainerCustom'>
       <Card title={"Datos de proveedor"} details={Detail}/>
