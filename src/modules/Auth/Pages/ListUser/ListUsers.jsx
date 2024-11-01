@@ -91,7 +91,13 @@ export const ListUsers = () => {
   };
 
   const handleSubmitUpdate = async (formData) => {
-    const response = await RequestHTTP(`/auth/${idUser}`, "PATCH", formData, token);
+    const { phone, dpi, ...resdata } = formData;
+    const newformdata = {
+      phone: Number(phone),
+      dpi: Number(dpi),
+      ...resdata
+    }
+    const response = await RequestHTTP(`/auth/${idUser}`, "PATCH", newformdata, token);
     if (response.sucess) {
       handleCloseUpdate();
       setMessage("Registro actualizado con éxito");

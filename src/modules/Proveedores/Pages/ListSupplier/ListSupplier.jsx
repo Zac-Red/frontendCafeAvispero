@@ -75,7 +75,13 @@ export const ListSupplier = () => {
   };
   
   const handleSubmitUpdate = async (formData) => {
-    const response = await RequestHTTP(`/suppliers/${idSuplier}`, "PATCH", formData, token);
+    const {dpi, tel, ...resdata} = formData;
+    const newformdata = {
+      tel: Number(tel),
+      dpi: Number(dpi),
+      ...resdata
+    }
+    const response = await RequestHTTP(`/suppliers/${idSuplier}`, "PATCH", newformdata, token);
     if (response.sucess) {
       handleCloseUpdate();
       setMessage("Registro actualizado con éxito");

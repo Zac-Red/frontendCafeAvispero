@@ -75,7 +75,12 @@ export const ListClients = () => {
   };
 
   const handleSubmitUpdate = async (formData) => {
-    const response = await RequestHTTP(`/customers/${idClient}`, "PATCH", formData, token);
+    const {phone, restData} = formData;
+    const newFormData = {
+      phone: Number(phone),
+      ...restData
+    }
+    const response = await RequestHTTP(`/customers/${idClient}`, "PATCH", newFormData, token);
     if (response.sucess) {
       handleCloseUpdate();
       setMessage("Registro actualizado con éxito");
