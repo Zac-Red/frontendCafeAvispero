@@ -14,6 +14,7 @@ import { SupplierSearchOptions } from '../../../Proveedores/Helpers/SupplierSear
 import { SupplierColumnsForShopping } from '../../Helpers/SupplierColumnsForShopping';
 import { CartRawMaterialFormfields, ComercialDocumentFormfields, initialCartRawMaterial, initialComercialDocument, propert, validationSchemaFormCartRawMaterial, validationSchemaFormComercialDocument } from '../../Helpers/CartRawMaterial';
 import { RequestHTTP } from '../../../../httpServer';
+import { formatCardRaw } from '../../../materiaprima/utils/FormatRawMaterial';
 
 
 export const RegisterShoppings = () => {
@@ -214,6 +215,7 @@ export const RegisterShoppings = () => {
         :
         <div className="containerProcess">
           <ContainerElements
+            formatData={formatCardRaw}
             data={rawmaterial.data?.items}
             propertys={propert}
             actionBtn={AgredProduct}/>

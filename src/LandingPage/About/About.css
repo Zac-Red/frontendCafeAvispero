@@ -1,13 +1,3 @@
-.sectAbout{
-  height: 100vh;
-  padding-top: 50px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
 .sectAbout .history {
   display: flex;
   flex-direction: column;
@@ -15,34 +5,85 @@
   align-items: center;
   text-align: center;
   width: 50%;
-  background-color: aliceblue;
-  box-shadow: 10px 10px 5px 0px rgba(0,0,0,0.5);
+  background: #FFF8F0;
+  border: 1px solid rgba(210, 105, 30, 0.2);
+  transition: all 0.2s;
+  box-shadow: 12px 12px 2px 1px rgba(210, 105, 30, 0.2);
   border-radius: 15px;
   padding: 30px;
 }
+.sectAbout .history:hover {
+  box-shadow: -12px 12px 2px -1px rgba(210, 105, 30, 0.2);
+}
 
-.sectAbout .socials {
-  display: flex;
-  gap: 50px;
+/* Social-buttons*/ 
+.social-buttons {
   margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f2f2f2;
+  box-shadow: 0px 0px 15px #00000027;
+  padding: 15px 10px;
+  border-radius: 5em;
 }
 
-.sectAbout .socials a {
-  text-decoration: none;
-  color: black;
+.social-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin: 0 10px;
+  background-color: #fff;
+  box-shadow: 0px 0px 4px #00000027;
+  transition: 0.3s;
 }
 
-.sectAbout .socials a svg {
-  font-size: 3rem;
+.social-button:hover {
+  background-color: #f2f2f2;
+  box-shadow: 0px 0px 6px 3px #00000027;
 }
 
-.sectAbout .socials a:hover{
-  color: chocolate;
+.social-buttons svg {
+  transition: 0.3s;
+  height: 20px;
+}
+
+.facebook {
+  background-color: #3b5998;
+}
+
+.facebook svg {
+  fill: #f2f2f2;
+}
+
+.facebook:hover svg {
+  fill: #3b5998;
+}
+
+.instagram {
+  background-color: #c13584;
+}
+
+.instagram svg {
+  fill: #f2f2f2;
+}
+
+.instagram:hover svg {
+  fill: #c13584;
 }
 
 @media only screen and (max-width: 992px) { 
   .sectAbout .history{
-    width: 90%;
+    width: 80%;
     text-align: justify;
+  }
+}
+
+@media only screen and (min-width: 600px) { 
+  .social-buttons{  
+    display: none;
   }
 }

@@ -53,3 +53,12 @@ export const formatReportTopCustomers = (item)=> {
     ...restdata
   }
 }
+
+export const formatCardProduct = (item)=> {
+  const {stock, ...restdata} = item;
+  const newstock = parseFloat(stock.toFixed(4))
+  return {
+    stock: newstock,
+    ...restdata
+  }
+}

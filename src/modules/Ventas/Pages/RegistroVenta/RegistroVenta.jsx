@@ -14,6 +14,7 @@ import { ClientColumnsForSale } from '../../Helpers/ClientColumnsForSale';
 import { CartProductFormfields, initialCartProduct, propert, validationSchemaFormCartProduct } from '../../Helpers/CartProduct';
 import { RequestHTTP } from '../../../../httpServer';
 import useAuthStore from '../../../../store/AuthStore';
+import { formatCardProduct } from '../../utils/FormatVentas';
 
 export const RegistroVenta = () => {
   const { token } = useAuthStore();
@@ -204,6 +205,7 @@ export const RegistroVenta = () => {
         :
         <div className="containerProcess">
           <ContainerElements
+            formatData={formatCardProduct}
             data={product.data.items}
             propertys={propert}
             actionBtn={AgredProduct} />

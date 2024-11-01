@@ -14,7 +14,6 @@ export const TableDataCustom = ({ columns, formatData, page, setPage, rowsPerPag
 
   const handleChangePage = (newPage) => {
     setPage(newPage);
-    // refetch()
   };
 
   const handleChangeRowsPerPage = (event) => {

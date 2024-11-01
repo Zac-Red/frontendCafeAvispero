@@ -17,6 +17,7 @@ import { Cart } from '../../../../Components/Cart/Cart';
 import { getUnitMeasureObject } from '../../../Common/services/actions';
 import { formatUnitMeasureForSelect } from '../../../Common/utils/FormatUnitMeasure';
 import { RequestHTTP } from '../../../../httpServer';
+import { formatCardRaw } from '../../../materiaprima/utils/FormatRawMaterial';
 
 export const RegisterRecipProductions = () => {
   const { token } = useAuthStore();
@@ -224,6 +225,7 @@ export const RegisterRecipProductions = () => {
         :
         <div className="containerProcess">
           <ContainerElements
+            formatData={formatCardRaw}
             data={rawmaterials.data.items}
             propertys={Productpropert}
             actionBtn={SelectRawMaterial}/>

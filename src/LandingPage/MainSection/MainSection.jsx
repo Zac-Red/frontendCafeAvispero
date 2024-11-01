@@ -3,7 +3,7 @@ import './MainSection.css';
 
 export const MainSection = () => {
   return (
-    <div className="sectContain MainSection">
+    <>
       <div className='SectionContentImg'>
         <img src={ProductMain} alt="Café de Altura" />
       </div>
@@ -18,6 +18,6 @@ export const MainSection = () => {
           la naturaleza tiene para ofrecer.
         </article>
       </div>
-    </div>
+    </>
   )
 }

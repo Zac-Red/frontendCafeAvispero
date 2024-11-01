@@ -23,3 +23,12 @@ export const FormatKardexRawMaterial = (item) =>{
     ...restData
   }
 }
+
+export const formatCardRaw = (item)=> {
+  const {stock, ...restdata} = item;
+  const newstock = parseFloat(stock.toFixed(4))
+  return {
+    stock: newstock,
+    ...restdata
+  }
+}
